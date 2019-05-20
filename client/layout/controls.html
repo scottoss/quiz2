@@ -1,0 +1,69 @@
+<!doctype html>
+<head>
+	<title>Bday Control Panel</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="/cstyles.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/controls.js"></script>
+</head>
+
+<body onload="initData();">
+	<div id="wrap">
+		<div class="left">
+			<!-- CURRENT INFO from Server -->
+			<h3>Current:</h3>
+			
+				<p id="serverQuestion">Question</p>
+				<p id="serverAnswer">Answer</p>
+				<p id="serverNumber">Nr. </p>
+			
+		</div>
+		<div class="center"></div>
+		<div class="right">
+			<!-- TV CONTROLS -->
+			<h3>TV-Controls:</h3>
+			
+				<div>
+					<input type="button" value="Refresh Users / TV" onclick="refreshUsers();">
+				</div>
+				<div id="tvForm">
+					<h4 style="margin:5px">Input new Data</h4>
+					
+					Status:
+					<select id="tvStatus">
+						<option value="quiz">Quiz</option>
+						<option value="img">Image</option>
+						<option value="scores">Scores</option>
+					</select><br>
+					
+					Number:
+					<input type="text" id="tvNumber">
+					
+					Extra:
+					<input type="text" id="tvExtra">
+					
+					Question:
+					<input type="text" id="tvQuestion">
+					
+					Answer:
+					<input type="text" id="tvAnswer">
+					
+					<input type="button" value="Update" onclick="submitData();">
+					<input type="button" value="Reset Ready" onclick="resetReady();">
+				</div>
+			
+		</div>
+	<div class="clearBoth"></div>
+
+	</div>
+	<section>
+			<!-- SCORES -->
+			<h3>Scores:</h3>
+			
+				<table id="scoreTable"></table>
+			
+	</section>
+	<aside>
+	</aside>
+</body>

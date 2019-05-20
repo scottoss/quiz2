@@ -1,0 +1,11 @@
+{
+  "name": "node-quiz-server",
+  "version": "1.0.0",
+  "description": "NodeJS Quiz Server using ExpressJS and Socket.io",
+  "dependencies": {
+    "express": "^4.16.3",
+    "jquery": "^3.3.1",
+    "socket.io": "^2.1.1"
+  },
+  "license": "MIT"
+}

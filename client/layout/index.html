@@ -1,0 +1,28 @@
+<!doctype html>
+<head>
+	<title>Quiz</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/index.js"></script>
+
+<body>
+	<ul id="toplist">
+		<li style="display: inline-block;"><h3 id=score></h3></li>
+		<li style="float:right;display: inline-block;padding-top: 15px;padding-right: 8px;"><input type="image" src="/settings.png" height="30" onclick = "promptName();" /></li>
+	<ul>
+	<div id=quiz-info>
+		<h1 id=question></h1>
+		<h2 id=answer></h2>
+	</div>
+	<form id="answerInput">
+		<input type="text" id="answerBox" maxlength="26" align=center onchange = "updateInput();" onkeypress = "updateInput();" onpaste = "updateInput();" oninput = "updateInput();" onsubmit = "updateInput();" /><br>
+		<div class="container">
+			<input type="checkbox" id="cbtest" onchange = "updateInput();" />
+			<label for="cbtest" class="check-box">Fertig</label>
+		</div>
+	</form>
+</body>

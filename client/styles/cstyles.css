@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700');
+
+body {
+		font-family: 'Montserrat', sans-serif;
+		background-color: #1a1a1a;
+		color: white;
+}
+
+aside {
+	float: right;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid white;
+	padding: 4px;
+}
+
+#serverQuestion {
+	color: #ced46c;
+}
+
+#serverAnswer {
+	color: #72ae70;
+}
+
+#serverNumber {
+	color: #a33d3d;
+}
+
+#wrap {
+width: auto;
+position: relative;
+}
+
+#tvForm {
+	height: 10%;
+	margin-top: 20px;
+	margin-right: 10px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: #2b2b2b;
+}
+
+.left {
+width: 40%;
+float: left;
+}
+
+.right {
+width: 15%;
+float: left;
+}
+
+.center {
+float: left;
+min-width: 60%;
+width: auto;
+position: relative;
+}
+
+.header {
+	color: #61a8dd;
+}
