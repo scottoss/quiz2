@@ -1,0 +1,86 @@
+<!doctype html>
+<head>
+	<title>Quiz</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="scripts/quiz.js"></script>
+</head>
+
+<body>
+	<nav class="white">
+		<div class="nav-wrapper">
+		  <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
+		  <ul class="right hide-on-med-and-down">
+			<li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li>
+		  </ul>
+		</div>
+	</nav>
+	
+	<div class="container section" id="pageContent">
+		<div class="progress white">
+            <div class="indeterminate blue"></div>
+        </div>
+    </div>
+
+</body>
+
+<template id="waiting-template">
+    <div class="row">
+        <div class="card-panel">
+            <h5 class="header">Waiting for Start...</h5>
+            <p>When all users are connected, the game will start.</p>
+        </div>
+    </div>
+</template>
+
+<template id="choice-template">
+    <div class="row">
+        <div class="card-panel">
+            <h5 class="header">Question</h5>
+            <h6 id="question" class="text-blue"></h6>
+        </div>
+        <div class="section">
+            <h5 class="header">Your Answer</h5>
+            <div class="collection">
+                <a onclick="choiceSelect(1)" class="collection-item active" id="answer1"></a>
+                <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
+                <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
+                <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
+            </div>
+            <label>
+                <input type="checkbox" id="ready" class="filled-in">
+                <span>Ready</span>
+            </label>
+        </div>
+    </div>
+</template>
+
+<template id="free-template">
+    <div class="row">
+        <div class="card-panel">
+            <h5 class="header">Question</h5>
+            <h6 id="question" class="blue-text"></h6>
+        </div>
+        <div class="section">
+            <h5 class="header">Your Answer</h5>
+            <div class="row valign-wrapper">
+                <div class="input-field col s10">
+                    <input id="user_answer" type="text" class="validate">
+                    <label for="user_answer">Live Answer</label>
+                </div>
+                <div class="col s2">
+                    <label>
+                        <input type="checkbox" id="ready" class="filled-in">
+                        <span>Ready</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -4,7 +4,42 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no" />
 	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="/styles.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="scripts/login.js"></script>
 </head>
 
-Login-Page
+<body>
+	<nav class="white">
+		<div class="nav-wrapper">
+		  <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
+		  <ul class="right hide-on-med-and-down">
+			<li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li>
+		  </ul>
+		</div>
+	</nav>
+	
+	<div class="container section">
+		<div class="section">
+			<h5>Please Login:</h5>
+		</div>
+		
+		<div class="section">
+			<div class="input-field col s5">
+				<select id="userList">
+					<option value="" disabled selected>Select the user</option>
+				</select>
+				<label>User Name</label>
+			</div>
+			<div class="input-field col s5">
+			  <input id="password" type="password" class="validate">
+			  <label for="password">Password</label>
+			</div>
+			<a class="waves-effect waves-light btn blue" onclick="login()"><i class="material-icons left">check</i>Login</a>
+		</div>
+    </div>
+
+</body>
