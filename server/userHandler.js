@@ -20,7 +20,7 @@ exports.loginUser = function (name, password) {
     return id;
 }
 
-exports.checkId = function (id) {
+exports.validateId = function (id) {
     let success = false;
     users.forEach(u => {
         if (u.id == id) success = true;
@@ -35,3 +35,29 @@ exports.getUserById = function (id) {
     });
     return gotUser;
 }
+
+exports.checkMaster = function (id) {
+    if (users[0].id == id) return true;
+    return null;
+}
+
+exports.getMasterInfo = function () {
+    let uList = users.slice(0);
+    uList.splice(0, 1);
+    uList.forEach(u => {
+        delete u.password;
+    });
+    return uList;
+}
+
+exports.resetUserInputs = function () {
+
+}
+
+/*
+exports.setSocketId = function (userId, socketId) {
+    users.forEach(u => {
+        if (u.id == userId) u.socketId = socketId;
+    });
+}
+*/

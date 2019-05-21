@@ -17,6 +17,9 @@ app.get('/', function(req, res){
 app.get('/quiz', function(req, res){
 	res.sendFile(path.join(__dirname, 'client/layout/quiz.html'));
 });
+app.get('/master', function(req, res){
+	res.sendFile(path.join(__dirname, 'client/layout/master.html'));
+});
 
 // Handle Data-Flow
 io.on('connection', function(socket){
@@ -26,25 +29,48 @@ io.on('connection', function(socket){
 	// Login Page Logic
 	socket.on('getUserList', function(){
 		socket.emit('getUserList', userHandler.getUserList());
-	})
+	});
 
 	socket.on('userLogin', function(userData){
 		let id = userHandler.loginUser(userData.name, userData.password);
 		if (id) {
-			socket.emit('loginSuccess', id);
+			// userHandler.setSocketId(id, socket.id); // Save socket
+			socket.emit('loginSuccess', { id: id, isMaster: userHandler.checkMaster(id) });
 		} else {
 			socket.emit('loginFailed');
 		}
-	})
+	});
 
 	// Quiz Page Login Handling
 	socket.on('validateLogin', function(userId) {
-		if (userHandler.checkId(userId) == true) {
-			socket.emit('validateSuccess');
+		if (userHandler.validateId(userId) == true) {
+			// userHandler.setSocketId(userId, socket.id); // Save socket
+			socket.emit('validateSuccess', userHandler.checkMaster(userId));
 			updateUserPage(socket, userId);
 		} else {
 			socket.emit('validationFailed');
 		}
+	});
+
+	// Updates
+	socket.on('requestUpdate', function (id) {
+		if (userHandler.checkMaster(id) == true) {
+			socket.emit('masterQuiz', quizHandler.getQuiz());
+			socket.emit('masterUsers', userHandler.getMasterInfo());
+		}
+		updateUserPage(socket, id);
+	});
+
+	// Master Controls
+	socket.on('nextQuestion', function () {
+		quizHandler.changeQuestion(1);
+		io.emit('resetInput');
+		updateAll();
+	});
+	socket.on('lastQuestion', function () {
+		quizHandler.changeQuestion(-1);
+		io.emit('resetInput');
+		updateAll();
 	});
 
 	// Disconnect Handling
@@ -59,4 +85,8 @@ http.listen(80, function(){
 
 function updateUserPage (socket, userId) {
 	socket.emit('pageUpdate', quizHandler.getPageInfo(userId));
+}
+
+function updateAll() {
+	io.emit('notifyUpdate');
 }

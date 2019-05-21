@@ -4,10 +4,27 @@ var info = {};
 
 socket.on('connect', function(){
     if (!sessionStorage.userId) window.location = "/";
-    socket.emit('validateLogin', sessionStorage.userId);
+    if (sessionStorage.userId) socket.emit('validateLogin', sessionStorage.userId);
 });
 
-socket.on('validationFailed', function () { window.location = "/" });
+socket.on('validateSuccess', function (isMaster) { 
+    if (isMaster == true) { 
+        window.location = "/master";
+    }
+});
+
+socket.on('validationFailed', function () {
+    sessionStorage.userId = null;
+    window.location = "/";
+});
+
+socket.on('resetInput', function () {
+    $('#user_answer').val("");
+});
+
+socket.on('notifyUpdate', function () {
+    socket.emit('requestUpdate', sessionStorage.userId);
+});
 
 function refreshPage () { location.reload() } 
 
@@ -59,4 +76,8 @@ function choiceSelect(nr) {
         $('.collection-item').removeClass('active');
         $('#answer'+nr).addClass('active');
     }
+}
+
+function submitUpdate() {
+    // TODO: Update Logic here
 }

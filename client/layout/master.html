@@ -1,0 +1,122 @@
+<!doctype html>
+<head>
+	<title>Quiz</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="scripts/master.js"></script>
+</head>
+
+<body>
+	<nav class="white">
+		<div class="nav-wrapper">
+		  <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
+		  <ul class="right hide-on-med-and-down">
+			<li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li>
+		  </ul>
+		</div>
+	</nav>
+	
+	<div id="pageContent" class="row container section">
+		<div class="progress white">
+            <div class="indeterminate blue"></div>
+        </div>
+    </div>
+
+</body>
+
+<template id="waiting-template">
+    <div class="row">
+        <div class="card-panel">
+            <h5 class="header">Waiting for Start...</h5>
+            <a class="waves-effect waves-light btn"><i class="material-icons right">label_important</i>Start Game</a>
+        </div>
+    </div>
+</template>
+
+<template id="ingame-template">
+    <div class="col s6 container section card-panel" id="quizSpace"></div>
+    <div class="col s3">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Answers</h4></li>
+            <div id="answers"></div>
+        </ul>
+    </div>
+    <div class="col s3">
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Scoreboard</h4></li>
+            <div id="scoreboard"></div>
+        </ul>
+    </div>
+</template>
+
+<template id="choice-template">
+    <div class="col s12">
+        <div class="section">
+            <h5 class="header">Question</h5>
+            <div class="row">
+                <h6 id="question" class="blue-text col s10 offset-s1"></h6>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="section">
+            <h5 class="header">Possible Answers</h5>
+            <div class="collection">
+                <a onclick="choiceSelect(1)" class="collection-item blue-text" id="answer1"></a>
+                <a onclick="choiceSelect(2)" class="collection-item blue-text" id="answer2"></a>
+                <a onclick="choiceSelect(3)" class="collection-item blue-text" id="answer3"></a>
+                <a onclick="choiceSelect(4)" class="collection-item blue-text" id="answer4"></a>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="section row s1 valign-wrapper">
+            <ul class="pagination col s4">
+                        <li class="waves-effect"><a onclick="lastQuestion()"><i class="material-icons">chevron_left</i></a></li>
+                        <li id="pageNumber" style="padding-top: 2px;">0/0</li>
+                        <li class="waves-effect"><a onclick="nextQuestion()"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
+            <div class="col s3 center">
+                    <span class="new badge blue" data-badge-caption="" id="category" style="float: none; padding: 4px;"></span>
+            </div>
+            <div class="col s5 center">
+                <div class="switch">
+                    <label>
+                    Hidden
+                    <input type="checkbox" id="answerSwitch">
+                    <span class="lever"></span>
+                    Shown
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="free-template">
+    <div class="row">
+        <div class="card-panel">
+            <h5 class="header">Question</h5>
+            <h6 id="question" class="blue-text"></h6>
+        </div>
+        <div class="section">
+            <h5 class="header">Your Answer</h5>
+            <div class="row valign-wrapper">
+                <div class="input-field col s10">
+                    <input id="user_answer" type="text" class="validate">
+                    <label for="user_answer">Live Answer</label>
+                </div>
+                <div class="col s2">
+                    <label>
+                        <input type="checkbox" id="ready" class="filled-in">
+                        <span>Ready</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

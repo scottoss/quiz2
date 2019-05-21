@@ -6,25 +6,35 @@ $( document ).ready(function() {
 });
 
 socket.on('connect', function(){
-    socket.emit('validateLogin', sessionStorage.userId);
+    if (sessionStorage.userId) socket.emit('validateLogin', sessionStorage.userId);
     socket.emit('getUserList');
 });
 
-socket.on('validateSuccess', function () { window.location = "/quiz"; });
-
-socket.on('getUserList', function(userList) {
-    console.log(userList);
-    if (userList != null) populateUserSelection(userList);
+socket.on('validateSuccess', function (isMaster) { 
+    if (isMaster == true) { 
+        window.location = "/master";
+    } else {
+        window.location = "/quiz";
+    }
 });
 
-socket.on('loginSuccess', function(userId) {
-    sessionStorage.userId = userId;
-    window.location = "/quiz";
+socket.on('loginSuccess', function(d) {
+    sessionStorage.userId = d.id;
+    if (d.isMaster == true) { 
+        window.location = "/master";
+    } else {
+        window.location = "/quiz";
+    }
 });
 
 socket.on('loginFailed', function(userId) {
     $('#password').val('');
     M.toast({html: 'Login Failed. Wrong Credentials?'});
+});
+
+socket.on('getUserList', function(userList) {
+    console.log(userList);
+    if (userList != null) populateUserSelection(userList);
 });
 
 function populateUserSelection(userList) {

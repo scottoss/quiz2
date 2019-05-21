@@ -11,6 +11,7 @@ let quizData = csvsync.parse(csvFile, {
 
 let currentQuestion = 0;
 let quizStatus = "question";
+generateLastAnswer();
 
 exports.getPageInfo = function (userId) {
     let data = {
@@ -50,4 +51,47 @@ exports.getPageInfo = function (userId) {
     }
     // TODO: Implement Scoring
     return data;
+}
+
+exports.getQuiz = function () {
+    return {
+        status: quizStatus,
+        question: quizData[currentQuestion].question,
+        type: quizData[currentQuestion].type,
+        category: quizData[currentQuestion].category,
+        answer1: quizData[currentQuestion].answer1,
+        answer2: quizData[currentQuestion].answer2,
+        answer3: quizData[currentQuestion].answer3,
+        answer4: quizData[currentQuestion].answer4,
+        trueAnswer: quizData[currentQuestion].true_answer,
+        other: quizData[currentQuestion].other,
+        currentPage: (currentQuestion + 1) + '/' + quizData.length,
+    };
+}
+
+function generateLastAnswer() {
+    if (quizData[currentQuestion].type == "choice" && !quizData[currentQuestion].answer4) {
+        let randNum = Math.floor((Math.random() * 4) + 1);
+        if (randNum == 1) {
+            quizData[currentQuestion].answer4 = quizData[currentQuestion].answer1;
+            quizData[currentQuestion].answer1 = quizData[currentQuestion].true_answer;
+        } else if (randNum == 2) {
+            quizData[currentQuestion].answer4 = quizData[currentQuestion].answer2;
+            quizData[currentQuestion].answer2 = quizData[currentQuestion].true_answer;
+        } else if (randNum == 3) {
+            quizData[currentQuestion].answer4 = quizData[currentQuestion].answer3;
+            quizData[currentQuestion].answer3 = quizData[currentQuestion].true_answer;
+        } else {
+            quizData[currentQuestion].answer4 = quizData[currentQuestion].true_answer;
+        }
+        console.log('Randomly chose Answer no. 4');
+    }
+    console.log("quizData[currentQuestion].type "+quizData[currentQuestion].type);
+    console.log("quizData[currentQuestion].answer4 "+quizData[currentQuestion].answer4);
+    console.log('Answer no.4: ' + quizData[currentQuestion].answer4);
+}
+
+exports.changeQuestion = function (dirCount) {
+    currentQuestion += dirCount;
+    generateLastAnswer();
 }
