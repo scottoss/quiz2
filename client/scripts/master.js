@@ -20,6 +20,9 @@ socket.on('validationFailed', function () { console.log("Validation failed."); w
 socket.on('notifyUpdate', function () {
     socket.emit('requestUpdate', sessionStorage.userId);
 });
+socket.on('notifyMasterUpdate', function () {
+    socket.emit('requestUserUpdate', sessionStorage.userId);
+});
 
 function refreshPage () { location.reload() } 
 
@@ -33,10 +36,12 @@ socket.on('masterQuiz', function(data) {
 socket.on('masterUsers', function(data) {
     users = data;
     updateScoreboard();
+    updateAnswers();
 });
 
 function updateQuizInfo () {
     applyTemplate();
+
     if (quiz.status == "question" || quiz.status == "answer") {
         $('#question').html(quiz.question);
         $('#category').html(quiz.category);
@@ -47,6 +52,13 @@ function updateQuizInfo () {
             $('#answer3').html(quiz.answer3);
             $('#answer4').html(quiz.answer4);
         }
+        if (quiz.type == "guess") $('#guessRange').html(quiz.other);
+        if (quiz.type == "free" && quiz.status == "answer") $('#trueAnswer').html(quiz.trueAnswer);
+        if (quiz.type == "image") $('#image').attr("src", quiz.other);
+        if (quiz.type == "image" && quiz.status == "answer") $('#trueAnswer').html(quiz.trueAnswer);
+        if (quiz.type == "image") $('.materialboxed').materialbox();
+        if (quiz.type == "yt") $('#video').attr("src", quiz.other);
+        if (quiz.type == "yt" && quiz.status == "answer") $('#trueAnswer').html(quiz.trueAnswer);
     }
 }
 
@@ -60,14 +72,54 @@ function applyTemplate() {
         if (quiz.type == "guess") $('#quizSpace').html($('#guess-template').html());
         if (quiz.type == "free") $('#quizSpace').html($('#free-template').html());
         if (quiz.type == "image") $('#quizSpace').html($('#image-template').html());
+        if (quiz.type == "yt") $('#quizSpace').html($('#yt-template').html());
     }
 }
 
 function updateScoreboard () {
+    let html = "";
+    users.forEach(u => {
+        let uHtml = $('#scoreboardUser').html();
+        uHtml = uHtml.replace("USER", u.name + ": " + u.score);
+        if (u.id) {
+            uHtml = uHtml.replace('add_func=""', 'href=javascript:addScore("'+u.id+'")');
+            uHtml = uHtml.replace('low_func=""', 'href=javascript:lowerScore("'+u.id+'")');
+        } else {
+            uHtml = uHtml.replace("collection-item", "collection-item red-text");
+        }
+        html += uHtml;
+    });
+    $('#scoreboard').html(html);
+}
 
+function updateAnswers () {
+    let html = "";
+    users.forEach(u => {
+        let uHtml = $('#answerUser').html();
+        uHtml = uHtml.replace("USER", u.name + " &gt;");
+        if (u.input) {
+            if (quiz.type != "choice") {
+                uHtml = uHtml.replace('ANSWER', u.input);
+            }  else {
+                uHtml = uHtml.replace('ANSWER', quiz["answer"+u.input]);
+            }
+        } else {
+            uHtml = uHtml.replace('ANSWER', '~');
+        }
+        if (u.ready == true) {
+            uHtml = uHtml.replace('</li>','<i class="material-icons">check_box</i></li>');
+        } else {
+            uHtml = uHtml.replace('</li>','<i class="material-icons">check_box_outline_blank</i></li>');
+        }
+        html += uHtml;
+    });
+    $('#answers').html(html);
 }
 
 // Manual Stuff (Controls):
 
 function nextQuestion() { socket.emit('nextQuestion'); }
 function lastQuestion() { socket.emit('lastQuestion'); }
+
+function addScore(id) { socket.emit('addScore', id) }
+function lowerScore(id) { socket.emit('lowerScore', id) }

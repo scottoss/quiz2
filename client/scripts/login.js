@@ -3,6 +3,15 @@ var socket = io();
 
 $( document ).ready(function() {
     $('select').formSelect();
+    $('#password').bind("enterKey",function(e){
+        login();
+    });
+    $('#password').keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            $(this).trigger("enterKey");
+        }
+    });
 });
 
 socket.on('connect', function(){

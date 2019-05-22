@@ -33,8 +33,6 @@ function refreshPage () { location.reload() }
         \/              \/     */
 
 socket.on('pageUpdate', function(pageInfo) {
-    // TODO: Remove Debug Info
-    console.log(pageInfo);
     // Set the template if needed.
     if (!info.quiz) {
         setTemplate(pageInfo.quiz);
@@ -58,6 +56,25 @@ socket.on('pageUpdate', function(pageInfo) {
         $('#question').html(info.quiz.question);
     }
 
+    if (info.quiz.type == "guess") {
+        $('#question').html(info.quiz.question);
+        var range = info.quiz.other.split("-");
+        $('#user_answer').attr("min", range[0]);
+        $('#user_answer').attr("max", range[1]);
+        $('#user_answer_reflection').html($('#user_answer').val());
+    }
+
+    if (info.quiz.type == "image") {
+        $('#image').attr("src", info.quiz.other);
+        if (info.quiz.status == "answer") $('#trueAnswer').html(info.quiz.trueAnswer);
+        $('.materialboxed').materialbox();
+    }
+
+    if (info.quiz.type == "yt") {
+        $('#video').attr("src", info.quiz.other);
+        if (info.quiz.status == "answer") $('#trueAnswer').html(info.quiz.trueAnswer);
+    }
+
 });
 
 function setTemplate(quizInfo) {
@@ -69,6 +86,7 @@ function setTemplate(quizInfo) {
     if (quizInfo.type == "guess") $('#pageContent').html($('#guess-template').html());
     if (quizInfo.type == "free") $('#pageContent').html($('#free-template').html());
     if (quizInfo.type == "image") $('#pageContent').html($('#image-template').html());
+    if (quizInfo.type == "yt") $('#pageContent').html($('#yt-template').html());
 }
 
 function choiceSelect(nr) {
@@ -76,8 +94,18 @@ function choiceSelect(nr) {
         $('.collection-item').removeClass('active');
         $('#answer'+nr).addClass('active');
     }
+    // Update Logic for this type goes here:
+    socket.emit('userInput', { input: nr, id: sessionStorage.userId });
 }
 
 function submitUpdate() {
-    // TODO: Update Logic here
+    socket.emit('userInput', { input: $('#user_answer').val(), id: sessionStorage.userId });
+}
+
+function submitReady() {
+    if ($('#ready').is(':checked')) {
+        socket.emit('userReady', { id: sessionStorage.userId, ready: true });
+    } else if ($('#ready')) {
+        socket.emit('userReady', { id: sessionStorage.userId, ready: false });
+    }
 }

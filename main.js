@@ -36,6 +36,7 @@ io.on('connection', function(socket){
 		if (id) {
 			// userHandler.setSocketId(id, socket.id); // Save socket
 			socket.emit('loginSuccess', { id: id, isMaster: userHandler.checkMaster(id) });
+			updateMasterUsers();
 		} else {
 			socket.emit('loginFailed');
 		}
@@ -60,6 +61,21 @@ io.on('connection', function(socket){
 		}
 		updateUserPage(socket, id);
 	});
+	socket.on('requestUserUpdate', function (id) {
+		if (userHandler.checkMaster(id) == true) {
+			socket.emit('masterUsers', userHandler.getMasterInfo());
+		}
+	});
+
+	socket.on('userInput', function (d) {
+		userHandler.updateInput(d);
+		updateMasterUsers();
+	});
+
+	socket.on('userReady', function (d) {
+		userHandler.updateReady(d);
+		updateMasterUsers();
+	});
 
 	// Master Controls
 	socket.on('nextQuestion', function () {
@@ -71,6 +87,14 @@ io.on('connection', function(socket){
 		quizHandler.changeQuestion(-1);
 		io.emit('resetInput');
 		updateAll();
+	});
+	socket.on('addScore', function (id) {
+		userHandler.addUserScore(id);
+		updateMasterUsers();
+	});
+	socket.on('lowerScore', function (id) {
+		userHandler.lowerUserScore(id);
+		updateMasterUsers();
 	});
 
 	// Disconnect Handling
@@ -89,4 +113,8 @@ function updateUserPage (socket, userId) {
 
 function updateAll() {
 	io.emit('notifyUpdate');
+}
+
+function updateMasterUsers() {
+	io.emit('notifyMasterUpdate');
 }

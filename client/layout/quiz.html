@@ -54,9 +54,35 @@
                 <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
             </div>
             <label>
-                <input type="checkbox" id="ready" class="filled-in">
+                <input type="checkbox" id="ready" onchange="submitReady()" class="filled-in">
                 <span>Ready</span>
             </label>
+        </div>
+    </div>
+</template>
+
+<template id="guess-template">
+    <div class="row">
+        <div class="card-panel">
+            <h5 class="header">Question</h5>
+            <h6 id="question" class="blue-text"></h6>
+        </div>
+        <div class="section">
+            <h5 class="header">Your Answer</h5>
+            <div class="row valign-wrapper">
+                <div class="input-field col s10">
+                    <p class="range-field">
+                        <input type="range" onchange="submitUpdate()" id="user_answer" min="0" max="100" />
+                    </p>
+                    <p id="user_answer_reflection" class="blue-text"></p>
+                </div>
+                <div class="col s2">
+                    <label>
+                        <input type="checkbox" id="ready" onchange="submitReady()" class="filled-in">
+                        <span>Ready</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -71,12 +97,66 @@
             <h5 class="header">Your Answer</h5>
             <div class="row valign-wrapper">
                 <div class="input-field col s10">
-                    <input id="user_answer" type="text" class="validate">
+                    <input id="user_answer" onchange="submitUpdate()" type="text" class="validate">
                     <label for="user_answer">Live Answer</label>
                 </div>
                 <div class="col s2">
                     <label>
-                        <input type="checkbox" id="ready" class="filled-in">
+                        <input type="checkbox" onchange="submitReady()" id="ready" class="filled-in">
+                        <span>Ready</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="image-template">
+    <div class="row">
+        <div class="card-panel">
+            <div class="section">
+                <img class="materialboxed" id="image" alt="Loading..." width="100%" src="">
+            </div>
+            <h5 class="header">Question</h5>
+            <h6 id="question" class="blue-text"></h6>
+        </div>
+        <div class="section">
+            <h5 class="header">Your Answer</h5>
+            <div class="row valign-wrapper">
+                <div class="input-field col s10">
+                    <input id="user_answer" onchange="submitUpdate()" type="text" class="validate">
+                    <label for="user_answer">Live Answer</label>
+                </div>
+                <div class="col s2">
+                    <label>
+                        <input type="checkbox" onchange="submitReady()" id="ready" class="filled-in">
+                        <span>Ready</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="yt-template">
+    <div class="row">
+        <div class="card-panel">
+            <div class="section">
+                    <iframe id="video" width="100%" height="400px" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <h5 class="header">Question</h5>
+            <h6 id="question" class="blue-text"></h6>
+        </div>
+        <div class="section">
+            <h5 class="header">Your Answer</h5>
+            <div class="row valign-wrapper">
+                <div class="input-field col s10">
+                    <input id="user_answer" onchange="submitUpdate()" type="text" class="validate">
+                    <label for="user_answer">Live Answer</label>
+                </div>
+                <div class="col s2">
+                    <label>
+                        <input type="checkbox" onchange="submitReady()" id="ready" class="filled-in">
                         <span>Ready</span>
                     </label>
                 </div>

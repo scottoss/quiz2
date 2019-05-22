@@ -1,7 +1,7 @@
 var uidGen = require('rand-token').uid;
 let userFile = require('../quiz/users.json');
 
-let users = userFile.users;
+let users = userFile.users.concat();
 
 exports.getUserList = function () {
     let nameList = [];
@@ -10,6 +10,7 @@ exports.getUserList = function () {
 }
 
 exports.loginUser = function (name, password) {
+    console.log(users)
     let id;
     users.forEach(u => {
         if (name == u.name && password == u.password) {
@@ -42,16 +43,49 @@ exports.checkMaster = function (id) {
 }
 
 exports.getMasterInfo = function () {
-    let uList = users.slice(0);
-    uList.splice(0, 1);
-    uList.forEach(u => {
-        delete u.password;
+    let uList = [];
+    users.forEach(u => {
+        if (u.name != users[0].name) {
+            uList.push({
+                name: u.name,
+                id: u.id,
+                input: u.input,
+                ready: u.ready,
+                score: u.score,
+            });
+        }
     });
     return uList;
 }
 
+exports.updateInput = function (d) {
+    users.forEach(u => {
+        if (u.id == d.id) u.input = d.input;
+    });
+}
+
+exports.updateReady = function (d) {
+    users.forEach(u => {
+        if (u.id == d.id) u.ready = d.ready;
+    });
+    console.log(users);
+    console.log(d);
+}
+
 exports.resetUserInputs = function () {
 
+}
+
+exports.addUserScore = function (id) {
+    users.forEach(u => {
+        if (u.id == id) u.score++;
+    });
+}
+
+exports.lowerUserScore = function (id) {
+    users.forEach(u => {
+        if (u.id == id) u.score--;
+    });
 }
 
 /*
