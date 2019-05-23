@@ -9,5 +9,9 @@
     "rand-token": "^0.4.0",
     "socket.io": "^2.1.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "scripts" : {
+    "build" : "sass sass:client/styles && node main.js"
+  },
+  "main" : "npm run build"
 }
