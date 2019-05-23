@@ -73,6 +73,15 @@ function applyTemplate() {
         if (quiz.type == "free") $('#quizSpace').html($('#free-template').html());
         if (quiz.type == "image") $('#quizSpace').html($('#image-template').html());
         if (quiz.type == "yt") $('#quizSpace').html($('#yt-template').html());
+        if (quiz.status == "answer") {
+            $('#answerSwitch').prop('checked', true);
+            if (quiz.type == "choice") {
+                $('#answer'+quiz.trueAnswer).addClass("active");
+                $('#answer'+quiz.trueAnswer).addClass("white-text");
+            }
+            $('#trueAnswer').parent().removeAttr("hidden");
+            $('#trueAnswer').html(quiz.trueAnswer);
+        }
     }
 }
 
@@ -123,3 +132,11 @@ function lastQuestion() { socket.emit('lastQuestion'); }
 
 function addScore(id) { socket.emit('addScore', id) }
 function lowerScore(id) { socket.emit('lowerScore', id) }
+
+function toggleAnswer() {
+    let isActive = false;
+    if ($('#answerSwitch').is(':checked')) {
+        isActive = true;
+    }
+    socket.emit('showAnswers', isActive);
+}

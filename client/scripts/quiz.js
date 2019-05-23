@@ -37,7 +37,12 @@ socket.on('pageUpdate', function(pageInfo) {
     if (!info.quiz) {
         setTemplate(pageInfo.quiz);
     } else {
-        if (pageInfo.quiz.type != info.quiz.type && pageInfo.status != "waiting" && pageInfo.status != "score" && pageInfo.status != "finished") {
+        if (pageInfo.quiz.number != info.quiz.number && pageInfo.status != "waiting" && pageInfo.status != "score" && pageInfo.status != "finished") {
+            setTemplate(pageInfo.quiz);
+        }
+        if (pageInfo.quiz.status == "answer" && info.quiz.status == "question" || pageInfo.quiz.status == "question" && info.quiz.status == "answer") {
+            // If only status was changed, don't apply template. (On answer-reveal)
+        } else {
             setTemplate(pageInfo.quiz);
         }
     }
@@ -66,13 +71,26 @@ socket.on('pageUpdate', function(pageInfo) {
 
     if (info.quiz.type == "image") {
         $('#image').attr("src", info.quiz.other);
-        if (info.quiz.status == "answer") $('#trueAnswer').html(info.quiz.trueAnswer);
         $('.materialboxed').materialbox();
     }
 
     if (info.quiz.type == "yt") {
         $('#video').attr("src", info.quiz.other);
-        if (info.quiz.status == "answer") $('#trueAnswer').html(info.quiz.trueAnswer);
+    }
+
+    if (info.quiz.status != "score") $('#score').html(info.user.score);
+
+    if (info.quiz.status == "question") {
+        $('#trueAnswer').parent().attr("hidden", "hidden");
+    }
+
+    if (info.quiz.status == "answer") {
+        $('#trueAnswer').parent().removeAttr("hidden");
+        if (info.quiz.type == "choice") {
+            $('#trueAnswer').html($('#answer'+info.quiz.trueAnswer).html());
+        } else {
+            $('#trueAnswer').html(info.quiz.trueAnswer);
+        }
     }
 
 });
@@ -108,4 +126,8 @@ function submitReady() {
     } else if ($('#ready')) {
         socket.emit('userReady', { id: sessionStorage.userId, ready: false });
     }
+}
+
+function updateReflection() {
+    $('#user_answer_reflection').html($('#user_answer').val());
 }

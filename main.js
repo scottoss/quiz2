@@ -79,11 +79,13 @@ io.on('connection', function(socket){
 
 	// Master Controls
 	socket.on('nextQuestion', function () {
+		userHandler.resetUserInputs();
 		quizHandler.changeQuestion(1);
 		io.emit('resetInput');
 		updateAll();
 	});
 	socket.on('lastQuestion', function () {
+		userHandler.resetUserInputs();
 		quizHandler.changeQuestion(-1);
 		io.emit('resetInput');
 		updateAll();
@@ -95,6 +97,10 @@ io.on('connection', function(socket){
 	socket.on('lowerScore', function (id) {
 		userHandler.lowerUserScore(id);
 		updateMasterUsers();
+	});
+	socket.on('showAnswers', function (isRevealed) {
+		quizHandler.revealAnswer(isRevealed);
+		updateAll();
 	});
 
 	// Disconnect Handling

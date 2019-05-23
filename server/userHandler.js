@@ -68,12 +68,13 @@ exports.updateReady = function (d) {
     users.forEach(u => {
         if (u.id == d.id) u.ready = d.ready;
     });
-    console.log(users);
-    console.log(d);
 }
 
 exports.resetUserInputs = function () {
-
+    users.forEach(u => {
+        u.ready = false;
+        u.input = null;
+    });
 }
 
 exports.addUserScore = function (id) {

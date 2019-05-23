@@ -15,10 +15,13 @@
 <body>
 	<nav class="white">
 		<div class="nav-wrapper">
-		  <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
-		  <ul class="right hide-on-med-and-down">
-			<li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li>
-		  </ul>
+            <ul class="left">
+                <li><h5 class="grey-text text-darken-4" id="score" style="margin-left: 18px;"></h5></li>
+            </ul>
+		    <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
+		    <ul class="right">
+			    <li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li>
+		    </ul>
 		</div>
 	</nav>
 	
@@ -27,7 +30,6 @@
             <div class="indeterminate blue"></div>
         </div>
     </div>
-
 </body>
 
 <template id="waiting-template">
@@ -48,7 +50,7 @@
         <div class="section">
             <h5 class="header">Your Answer</h5>
             <div class="collection">
-                <a onclick="choiceSelect(1)" class="collection-item active" id="answer1"></a>
+                <a onclick="choiceSelect(1)" class="collection-item" id="answer1"></a>
                 <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
                 <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
                 <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
@@ -57,6 +59,10 @@
                 <input type="checkbox" id="ready" onchange="submitReady()" class="filled-in">
                 <span>Ready</span>
             </label>
+        </div>
+        <div class="section" hidden>
+            <h5 class="header">True Answer</h5>
+            <h6 id="trueAnswer" class="blue-text"></h6>
         </div>
     </div>
 </template>
@@ -72,7 +78,7 @@
             <div class="row valign-wrapper">
                 <div class="input-field col s10">
                     <p class="range-field">
-                        <input type="range" onchange="submitUpdate()" id="user_answer" min="0" max="100" />
+                        <input type="range" oninput="updateReflection()" onchange="submitUpdate()" id="user_answer" min="0" max="100" />
                     </p>
                     <p id="user_answer_reflection" class="blue-text"></p>
                 </div>
@@ -83,6 +89,10 @@
                     </label>
                 </div>
             </div>
+        </div>
+        <div class="section" hidden>
+            <h5 class="header">True Answer</h5>
+            <h6 id="trueAnswer" class="blue-text"></h6>
         </div>
     </div>
 </template>
@@ -97,7 +107,7 @@
             <h5 class="header">Your Answer</h5>
             <div class="row valign-wrapper">
                 <div class="input-field col s10">
-                    <input id="user_answer" onchange="submitUpdate()" type="text" class="validate">
+                    <input id="user_answer" onkeyup="submitUpdate()" type="text" class="validate">
                     <label for="user_answer">Live Answer</label>
                 </div>
                 <div class="col s2">
@@ -107,6 +117,10 @@
                     </label>
                 </div>
             </div>
+        </div>
+        <div class="section" hidden>
+            <h5 class="header">True Answer</h5>
+            <h6 id="trueAnswer" class="blue-text"></h6>
         </div>
     </div>
 </template>
@@ -124,7 +138,7 @@
             <h5 class="header">Your Answer</h5>
             <div class="row valign-wrapper">
                 <div class="input-field col s10">
-                    <input id="user_answer" onchange="submitUpdate()" type="text" class="validate">
+                    <input id="user_answer" onkeyup="submitUpdate()" type="text" class="validate">
                     <label for="user_answer">Live Answer</label>
                 </div>
                 <div class="col s2">
@@ -134,6 +148,10 @@
                     </label>
                 </div>
             </div>
+        </div>
+        <div class="section" hidden>
+            <h5 class="header">True Answer</h5>
+            <h6 id="trueAnswer" class="blue-text"></h6>
         </div>
     </div>
 </template>
@@ -151,7 +169,7 @@
             <h5 class="header">Your Answer</h5>
             <div class="row valign-wrapper">
                 <div class="input-field col s10">
-                    <input id="user_answer" onchange="submitUpdate()" type="text" class="validate">
+                    <input id="user_answer" onkeyup="submitUpdate()" type="text" class="validate">
                     <label for="user_answer">Live Answer</label>
                 </div>
                 <div class="col s2">
@@ -161,6 +179,10 @@
                     </label>
                 </div>
             </div>
+        </div>
+        <div class="section" hidden>
+            <h5 class="header">True Answer</h5>
+            <h6 id="trueAnswer" class="blue-text"></h6>
         </div>
     </div>
 </template>
