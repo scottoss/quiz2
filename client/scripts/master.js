@@ -68,19 +68,24 @@ function applyTemplate() {
     if (quiz.status == "finished") $('#pageContent').html($('#finished-template').html());
     if (quiz.status == "question" || quiz.status == "answer") {
         $('#pageContent').html($('#ingame-template').html());
-        if (quiz.type == "choice") $('#quizSpace').html($('#choice-template').html());
-        if (quiz.type == "guess") $('#quizSpace').html($('#guess-template').html());
-        if (quiz.type == "free") $('#quizSpace').html($('#free-template').html());
-        if (quiz.type == "image") $('#quizSpace').html($('#image-template').html());
-        if (quiz.type == "yt") $('#quizSpace').html($('#yt-template').html());
+
+        if (quiz.type == "choice") $('#choice-type').removeAttr("hidden");
+        if (quiz.type == "image") $('#image-type').removeAttr("hidden");
+        if (quiz.type == "yt") $('#yt-type').removeAttr("hidden");
+        if (quiz.type == "guess") $('#guess-type').removeAttr("hidden");
+
         if (quiz.status == "answer") {
             $('#answerSwitch').prop('checked', true);
             if (quiz.type == "choice") {
                 $('#answer'+quiz.trueAnswer).addClass("active");
-                $('#answer'+quiz.trueAnswer).addClass("white-text");
+                // $('#answer'+quiz.trueAnswer).addClass("white-text");
+            } else {
+                $('#answer-stage').removeAttr("hidden");
+                $('#trueAnswer').parent().removeAttr("hidden");
+                $('#trueAnswer').html(quiz.trueAnswer);
             }
-            $('#trueAnswer').parent().removeAttr("hidden");
-            $('#trueAnswer').html(quiz.trueAnswer);
+        } else {
+            $('#answerSwitch').prop('checked', false);
         }
     }
 }
@@ -105,7 +110,7 @@ function updateAnswers () {
     let html = "";
     users.forEach(u => {
         let uHtml = $('#answerUser').html();
-        uHtml = uHtml.replace("USER", u.name + " &gt;");
+        uHtml = uHtml.replace("USER", u.name);
         if (u.input) {
             if (quiz.type != "choice") {
                 uHtml = uHtml.replace('ANSWER', u.input);

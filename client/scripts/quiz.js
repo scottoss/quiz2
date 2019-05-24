@@ -19,7 +19,7 @@ socket.on('validationFailed', function () {
 });
 
 socket.on('resetInput', function () {
-    $('#user_answer').val("");
+    $('#user-answer').val("");
 });
 
 socket.on('notifyUpdate', function () {
@@ -35,15 +35,17 @@ function refreshPage () { location.reload() }
 socket.on('pageUpdate', function(pageInfo) {
     // Set the template if needed.
     if (!info.quiz) {
-        setTemplate(pageInfo.quiz);
+        info = pageInfo;
+        setTemplate();
     } else {
         if (pageInfo.quiz.number != info.quiz.number && pageInfo.status != "waiting" && pageInfo.status != "score" && pageInfo.status != "finished") {
-            setTemplate(pageInfo.quiz);
-        }
-        if (pageInfo.quiz.status == "answer" && info.quiz.status == "question" || pageInfo.quiz.status == "question" && info.quiz.status == "answer") {
+            info = pageInfo;
+            setTemplate();
+        } else if (pageInfo.quiz.status == "answer" && info.quiz.status == "question" || pageInfo.quiz.status == "question" && info.quiz.status == "answer") {
             // If only status was changed, don't apply template. (On answer-reveal)
         } else {
-            setTemplate(pageInfo.quiz);
+            info = pageInfo;
+            setTemplate();
         }
     }
 
@@ -64,9 +66,9 @@ socket.on('pageUpdate', function(pageInfo) {
     if (info.quiz.type == "guess") {
         $('#question').html(info.quiz.question);
         var range = info.quiz.other.split("-");
-        $('#user_answer').attr("min", range[0]);
-        $('#user_answer').attr("max", range[1]);
-        $('#user_answer_reflection').html($('#user_answer').val());
+        $('#guess-answer').attr("min", range[0]);
+        $('#guess-answer').attr("max", range[1]);
+        $('#guess-answer-reflection').html($('#guess-answer').val());
     }
 
     if (info.quiz.type == "image") {
@@ -95,16 +97,20 @@ socket.on('pageUpdate', function(pageInfo) {
 
 });
 
-function setTemplate(quizInfo) {
-    if (quizInfo.status == "waiting") $('#pageContent').html($('#waiting-template').html());
-    if (quizInfo.status == "score") $('#pageContent').html($('#score-template').html());
-    if (quizInfo.status == "finished") $('#pageContent').html($('#finished-template').html());
+function setTemplate() {
+    if (info.quiz.status == "waiting") $('#pageContent').html($('#waiting-template').html());
+    if (info.quiz.status == "score") $('#pageContent').html($('#score-template').html());
+    if (info.quiz.status == "finished") $('#pageContent').html($('#finished-template').html());
     
-    if (quizInfo.type == "choice") $('#pageContent').html($('#choice-template').html());
-    if (quizInfo.type == "guess") $('#pageContent').html($('#guess-template').html());
-    if (quizInfo.type == "free") $('#pageContent').html($('#free-template').html());
-    if (quizInfo.type == "image") $('#pageContent').html($('#image-template').html());
-    if (quizInfo.type == "yt") $('#pageContent').html($('#yt-template').html());
+    if (info.quiz.status == "question" || info.quiz.status == "answer") {
+        $('#pageContent').html($('#page-content-template').html());
+
+        if (info.quiz.type == "image") $('#image-type').removeAttr("hidden");
+        if (info.quiz.type == "yt") $('#yt-type').removeAttr("hidden");
+        if (info.quiz.type == "choice") $('#choice-type').removeAttr("hidden");
+        if (info.quiz.type == "guess") $('#guess-type').removeAttr("hidden");
+        if (info.quiz.type != "choice" && info.quiz.type != "guess") $('#user-answer').parent().removeAttr("hidden");
+    }
 }
 
 function choiceSelect(nr) {
@@ -117,7 +123,11 @@ function choiceSelect(nr) {
 }
 
 function submitUpdate() {
-    socket.emit('userInput', { input: $('#user_answer').val(), id: sessionStorage.userId });
+    if (info.quiz.type == "guess") {
+        socket.emit('userInput', { input: $('#guess-answer').val(), id: sessionStorage.userId });
+    } else {
+        socket.emit('userInput', { input: $('#user-answer').val(), id: sessionStorage.userId });
+    }
 }
 
 function submitReady() {
@@ -129,5 +139,5 @@ function submitReady() {
 }
 
 function updateReflection() {
-    $('#user_answer_reflection').html($('#user_answer').val());
+    $('#guess-answer-reflection').html($('#guess-answer').val());
 }

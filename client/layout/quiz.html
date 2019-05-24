@@ -16,7 +16,7 @@
 	<nav class="white">
 		<div class="nav-wrapper">
             <ul class="left">
-                <li><h5 class="grey-text text-darken-4" id="score" style="margin-left: 18px;"></h5></li>
+                <li><a>Score: <span id="score"></span></a></li>
             </ul>
 		    <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
 		    <ul class="right">
@@ -41,15 +41,31 @@
     </div>
 </template>
 
-<template id="choice-template">
+<template id="page-content-template">
     <div class="row">
         <div class="card-panel">
+            <div id="image-type" class="section" hidden>
+                <img class="materialboxed" id="image" alt="Loading..." width="100%" src="">
+            </div>
+            <div id="yt-type" class="video-container" hidden>
+                <iframe id="video" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
             <h5 class="header">Question</h5>
             <h6 id="question" class="text-blue"></h6>
         </div>
         <div class="section">
             <h5 class="header">Your Answer</h5>
-            <div class="collection">
+            <div class="input-field" hidden>
+                <input id="user-answer" onkeyup="submitUpdate()" type="text" class="validate">
+                <label for="user-answer">Live Answer</label>
+            </div>
+            <div id="guess-type" class="input-field" hidden>
+                <p class="range-field">
+                    <input type="range" oninput="updateReflection()" onchange="submitUpdate()" id="guess-answer" min="0" max="100" />
+                </p>
+                <p id="guess-answer-reflection" class="blue-text"></p>
+            </div>
+            <div id="choice-type" class="collection" hidden>
                 <a onclick="choiceSelect(1)" class="collection-item" id="answer1"></a>
                 <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
                 <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
@@ -59,126 +75,6 @@
                 <input type="checkbox" id="ready" onchange="submitReady()" class="filled-in">
                 <span>Ready</span>
             </label>
-        </div>
-        <div class="section" hidden>
-            <h5 class="header">True Answer</h5>
-            <h6 id="trueAnswer" class="blue-text"></h6>
-        </div>
-    </div>
-</template>
-
-<template id="guess-template">
-    <div class="row">
-        <div class="card-panel">
-            <h5 class="header">Question</h5>
-            <h6 id="question" class="blue-text"></h6>
-        </div>
-        <div class="section">
-            <h5 class="header">Your Answer</h5>
-            <div class="row valign-wrapper">
-                <div class="input-field col s10">
-                    <p class="range-field">
-                        <input type="range" oninput="updateReflection()" onchange="submitUpdate()" id="user_answer" min="0" max="100" />
-                    </p>
-                    <p id="user_answer_reflection" class="blue-text"></p>
-                </div>
-                <div class="col s2">
-                    <label>
-                        <input type="checkbox" id="ready" onchange="submitReady()" class="filled-in">
-                        <span>Ready</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="section" hidden>
-            <h5 class="header">True Answer</h5>
-            <h6 id="trueAnswer" class="blue-text"></h6>
-        </div>
-    </div>
-</template>
-
-<template id="free-template">
-    <div class="row">
-        <div class="card-panel">
-            <h5 class="header">Question</h5>
-            <h6 id="question" class="blue-text"></h6>
-        </div>
-        <div class="section">
-            <h5 class="header">Your Answer</h5>
-            <div class="row valign-wrapper">
-                <div class="input-field col s10">
-                    <input id="user_answer" onkeyup="submitUpdate()" type="text" class="validate">
-                    <label for="user_answer">Live Answer</label>
-                </div>
-                <div class="col s2">
-                    <label>
-                        <input type="checkbox" onchange="submitReady()" id="ready" class="filled-in">
-                        <span>Ready</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="section" hidden>
-            <h5 class="header">True Answer</h5>
-            <h6 id="trueAnswer" class="blue-text"></h6>
-        </div>
-    </div>
-</template>
-
-<template id="image-template">
-    <div class="row">
-        <div class="card-panel">
-            <div class="section">
-                <img class="materialboxed" id="image" alt="Loading..." width="100%" src="">
-            </div>
-            <h5 class="header">Question</h5>
-            <h6 id="question" class="blue-text"></h6>
-        </div>
-        <div class="section">
-            <h5 class="header">Your Answer</h5>
-            <div class="row valign-wrapper">
-                <div class="input-field col s10">
-                    <input id="user_answer" onkeyup="submitUpdate()" type="text" class="validate">
-                    <label for="user_answer">Live Answer</label>
-                </div>
-                <div class="col s2">
-                    <label>
-                        <input type="checkbox" onchange="submitReady()" id="ready" class="filled-in">
-                        <span>Ready</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="section" hidden>
-            <h5 class="header">True Answer</h5>
-            <h6 id="trueAnswer" class="blue-text"></h6>
-        </div>
-    </div>
-</template>
-
-<template id="yt-template">
-    <div class="row">
-        <div class="card-panel">
-            <div class="section">
-                    <iframe id="video" width="100%" height="400px" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <h5 class="header">Question</h5>
-            <h6 id="question" class="blue-text"></h6>
-        </div>
-        <div class="section">
-            <h5 class="header">Your Answer</h5>
-            <div class="row valign-wrapper">
-                <div class="input-field col s10">
-                    <input id="user_answer" onkeyup="submitUpdate()" type="text" class="validate">
-                    <label for="user_answer">Live Answer</label>
-                </div>
-                <div class="col s2">
-                    <label>
-                        <input type="checkbox" onchange="submitReady()" id="ready" class="filled-in">
-                        <span>Ready</span>
-                    </label>
-                </div>
-            </div>
         </div>
         <div class="section" hidden>
             <h5 class="header">True Answer</h5>
