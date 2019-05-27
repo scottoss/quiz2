@@ -1,27 +1,27 @@
 // Imports
-var socket = io();
+var socket = io('/master');
 var users = [];
 var quiz = {};
 
 socket.on('connect', function(){
-    if (!sessionStorage.userId) window.location = "/";
-    if (sessionStorage.userId) socket.emit('validateLogin', sessionStorage.userId);
+    if (!sessionStorage.sessionToken) window.location = "/";
+    if (sessionStorage.sessionToken) socket.emit('validateToken', sessionStorage.sessionToken);
 });
 
-socket.on('validateSuccess', function (isMaster) { 
+socket.on('validationSuccess', function (isMaster) { 
     if (isMaster != true) { 
         window.location = "/quiz";
     }
-    socket.emit('requestUpdate', sessionStorage.userId);
+    socket.emit('requestUpdate', sessionStorage.sessionToken);
 });
 
 socket.on('validationFailed', function () { console.log("Validation failed."); window.location = "/" });
 
 socket.on('notifyUpdate', function () {
-    socket.emit('requestUpdate', sessionStorage.userId);
+    socket.emit('requestUpdate', sessionStorage.sessionToken);
 });
 socket.on('notifyMasterUpdate', function () {
-    socket.emit('requestUserUpdate', sessionStorage.userId);
+    socket.emit('requestUserUpdate', sessionStorage.sessionToken);
 });
 
 function refreshPage () { location.reload() } 

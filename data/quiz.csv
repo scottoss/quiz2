@@ -1,0 +1,7 @@
+Type,Category,Question,Right Answer,Other Answer 1,Other Answer 2,Other Answer 3,Other
+choice,Shooter,Frage 1,Right Answer,False Answer,False Answer 2,False Answer 3,
+choice,Shooter,Frage 1.5,Right Answer,False Answer,False Answer 2,False Answer 3,
+guess,Shooter,Frage 2,Right Answer,,,,1700-2000
+free,Shooter,Frage 3,Antwort,,,,
+image,Shooter,Frage 4,Bild-Antwort!,,,,https://unsplash.com/photos/Jlx5n7jm1Pg/download?force=true
+yt,Shooter,Frage 5,YT-Antwort,,,,https://www.youtube.com/embed/34b048IpaCQ

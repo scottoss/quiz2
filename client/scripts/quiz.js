@@ -1,20 +1,22 @@
 // Imports
-var socket = io();
-var info = {};
+var socket = io('/users');
+var quiz = {};
+var user = {};
 
 socket.on('connect', function(){
-    if (!sessionStorage.userId) window.location = "/";
-    if (sessionStorage.userId) socket.emit('validateLogin', sessionStorage.userId);
+    if (!sessionStorage.sessionToken) window.location = "/";
+    if (sessionStorage.sessionToken) socket.emit('validateToken', sessionStorage.sessionToken);
 });
 
-socket.on('validateSuccess', function (isMaster) { 
+socket.on('validationSuccess', function (isMaster) { 
     if (isMaster == true) { 
         window.location = "/master";
     }
+    socket.emit('requestUpdate', sessionStorage.sessionToken);
 });
 
 socket.on('validationFailed', function () {
-    sessionStorage.userId = null;
+    sessionStorage.sessionToken = null;
     window.location = "/";
 });
 
@@ -23,7 +25,7 @@ socket.on('resetInput', function () {
 });
 
 socket.on('notifyUpdate', function () {
-    socket.emit('requestUpdate', sessionStorage.userId);
+    socket.emit('requestUpdate', sessionStorage.sessionToken);
 });
 
 function refreshPage () { location.reload() } 
@@ -32,84 +34,87 @@ function refreshPage () { location.reload() }
         ||  Quiz-Logic  ||
         \/              \/     */
 
-socket.on('pageUpdate', function(pageInfo) {
+socket.on('pageUpdate', function(data) {
     // Set the template if needed.
-    if (!info.quiz) {
-        info = pageInfo;
+    if (quiz != {}) {
+        quiz = data.quiz;
+        user = data.user;
         setTemplate();
     } else {
-        if (pageInfo.quiz.number != info.quiz.number && pageInfo.status != "waiting" && pageInfo.status != "score" && pageInfo.status != "finished") {
-            info = pageInfo;
+        if (data.quiz.number != quiz.number && data.status != "waiting" && data.status != "score" && data.status != "finished") {
+            quiz = data.quiz;
+            user = data.user;
             setTemplate();
-        } else if (pageInfo.quiz.status == "answer" && info.quiz.status == "question" || pageInfo.quiz.status == "question" && info.quiz.status == "answer") {
-            // If only status was changed, don't apply template. (On answer-reveal)
+        } else if (data.quiz.status == "answer" && quiz.status == "question" || data.quiz.status == "question" && quiz.status == "answer") {
+            // On answer-reveal, don't apply template.
+            quiz = data.quiz;
+            user = data.user;
         } else {
-            info = pageInfo;
+            quiz = data.quiz;
+            user = data.user;
             setTemplate();
         }
     }
 
-    info = pageInfo;
-
-    if (info.quiz.type == "choice") {
-        $('#question').html(info.quiz.question);
-        $('#answer1').html(info.quiz.answer1);
-        $('#answer2').html(info.quiz.answer2);
-        $('#answer3').html(info.quiz.answer3);
-        $('#answer4').html(info.quiz.answer4);
+    if (quiz.type == "choice") {
+        $('#question').html(quiz.question);
+        $('#answer1').html(quiz.answer1);
+        $('#answer2').html(quiz.answer2);
+        $('#answer3').html(quiz.answer3);
+        $('#answer4').html(quiz.answer4);
     }
 
-    if (info.quiz.type == "free") {
-        $('#question').html(info.quiz.question);
+    if (quiz.type == "free") {
+        $('#question').html(quiz.question);
     }
 
-    if (info.quiz.type == "guess") {
-        $('#question').html(info.quiz.question);
-        var range = info.quiz.other.split("-");
+    if (quiz.type == "guess") {
+        $('#question').html(quiz.question);
+        var range = quiz.other.split("-");
         $('#guess-answer').attr("min", range[0]);
         $('#guess-answer').attr("max", range[1]);
         $('#guess-answer-reflection').html($('#guess-answer').val());
     }
 
-    if (info.quiz.type == "image") {
-        $('#image').attr("src", info.quiz.other);
+    if (quiz.type == "image") {
+        $('#image').attr("src", quiz.other);
         $('.materialboxed').materialbox();
     }
 
-    if (info.quiz.type == "yt") {
-        $('#video').attr("src", info.quiz.other);
+    if (quiz.type == "yt") {
+        $('#video').attr("src", quiz.other);
     }
 
-    if (info.quiz.status != "score") $('#score').html(info.user.score);
+    if (quiz.status != "score") $('#score').html(user.score);
 
-    if (info.quiz.status == "question") {
+    if (quiz.status == "question") {
         $('#trueAnswer').parent().attr("hidden", "hidden");
     }
 
-    if (info.quiz.status == "answer") {
+    if (quiz.status == "answer") {
         $('#trueAnswer').parent().removeAttr("hidden");
-        if (info.quiz.type == "choice") {
-            $('#trueAnswer').html($('#answer'+info.quiz.trueAnswer).html());
+        if (quiz.type == "choice") {
+            $('#trueAnswer').html($('#answer'+quiz.trueAnswer).html());
         } else {
-            $('#trueAnswer').html(info.quiz.trueAnswer);
+            $('#trueAnswer').html(quiz.trueAnswer);
         }
     }
 
 });
 
 function setTemplate() {
-    if (info.quiz.status == "waiting") $('#pageContent').html($('#waiting-template').html());
-    if (info.quiz.status == "score") $('#pageContent').html($('#score-template').html());
-    if (info.quiz.status == "finished") $('#pageContent').html($('#finished-template').html());
+    if (quiz.status == "waiting") $('#page-content').html($('#waiting-template').html());
+    if (quiz.status == "score") $('#page-content').html($('#score-template').html());
+    if (quiz.status == "finished") $('#page-content').html($('#finished-template').html());
     
-    if (info.quiz.status == "question" || info.quiz.status == "answer") {
-        $('#pageContent').html($('#page-content-template').html());
+    if (quiz.status == "question" || quiz.status == "answer") {
+        $('#page-content').html($('#quiz-template').html());
 
-        if (info.quiz.type == "image") $('#image-type').removeAttr("hidden");
-        if (info.quiz.type == "yt") $('#yt-type').removeAttr("hidden");
-        if (info.quiz.type == "choice") $('#choice-type').removeAttr("hidden");
-        if (info.quiz.type == "guess") $('#guess-type').removeAttr("hidden");
-        if (info.quiz.type != "choice" && info.quiz.type != "guess") $('#user-answer').parent().removeAttr("hidden");
+        if (quiz.type == "image") $('#image-type').removeAttr("hidden");
+        if (quiz.type == "yt") $('#yt-type').removeAttr("hidden");
+        if (quiz.type == "choice") $('#choice-type').removeAttr("hidden");
+        if (quiz.type == "guess") $('#guess-type').removeAttr("hidden");
+        if (quiz.type != "choice" && quiz.type != "guess") $('#user-answer').parent().removeAttr("hidden");
     }
 }
 
@@ -119,22 +124,22 @@ function choiceSelect(nr) {
         $('#answer'+nr).addClass('active');
     }
     // Update Logic for this type goes here:
-    socket.emit('userInput', { input: nr, id: sessionStorage.userId });
+    socket.emit('userInput', { input: nr, id: sessionStorage.sessionToken });
 }
 
 function submitUpdate() {
-    if (info.quiz.type == "guess") {
-        socket.emit('userInput', { input: $('#guess-answer').val(), id: sessionStorage.userId });
+    if (quiz.type == "guess") {
+        socket.emit('userInput', { input: $('#guess-answer').val(), id: sessionStorage.sessionToken });
     } else {
-        socket.emit('userInput', { input: $('#user-answer').val(), id: sessionStorage.userId });
+        socket.emit('userInput', { input: $('#user-answer').val(), id: sessionStorage.sessionToken });
     }
 }
 
 function submitReady() {
     if ($('#ready').is(':checked')) {
-        socket.emit('userReady', { id: sessionStorage.userId, ready: true });
+        socket.emit('userReady', { id: sessionStorage.sessionToken, ready: true });
     } else if ($('#ready')) {
-        socket.emit('userReady', { id: sessionStorage.userId, ready: false });
+        socket.emit('userReady', { id: sessionStorage.sessionToken, ready: false });
     }
 }
 

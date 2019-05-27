@@ -1,11 +1,14 @@
 <!doctype html>
 <head>
+    <!-- Meta -->
 	<title>Quiz</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <!-- Styling -->
 	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="styles/materialize.css">
+    <!-- Scripts -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
@@ -15,17 +18,13 @@
 <body>
 	<nav class="white">
 		<div class="nav-wrapper">
-            <ul class="left">
-                <li><a>Score: <span id="score"></span></a></li>
-            </ul>
+            <ul class="left"><li><a>Score: <span id="score"></span></a></li></ul>
 		    <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
-		    <ul class="right">
-			    <li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li>
-		    </ul>
+		    <ul class="right"><li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li></ul>
 		</div>
 	</nav>
-	
-	<div class="container section" id="pageContent">
+	<!-- Interchangable Content -->
+	<div class="container section" id="page-content">
 		<div class="progress white">
             <div class="indeterminate blue"></div>
         </div>
@@ -41,7 +40,7 @@
     </div>
 </template>
 
-<template id="page-content-template">
+<template id="quiz-template">
     <div class="row">
         <div class="card-panel">
             <div id="image-type" class="section" hidden>

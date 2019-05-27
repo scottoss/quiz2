@@ -1,17 +1,21 @@
-const fs = require('fs');
-const csvsync = require('csvsync');
-const userHandler = require('./userHandler');
+// Import Libraries and Modules
+const fileSystem = require('fs');
+const csvParser = require('csvsync');
+const userHandler = require('../users/userData');
 
-let csvFile = fs.readFileSync('./quiz/quiz.csv');
-let quizData = csvsync.parse(csvFile, {
+// Import Quiz Data
+let csvFile = fileSystem.readFileSync('data/quiz.csv');
+let quizData = csvParser.parse(csvFile, {
     skipHeader: true,
     returnObject: true,
     headerKeys: ['type', 'category', 'question', 'true_answer', 'answer1', 'answer2', 'answer3', 'other'],
-}); // true_answer = Server_side, Answer1-4 choices, Answer4 being generated when loading Question
+}); // answer4 is being generated later
 
+// Init variables
 let currentQuestion = 0;
 let quizStatus = "question"; // "waiting", "score", "finished", "question", "answer"
 generateLastAnswer();
+
 
 exports.getPageInfo = function (userId) {
     let data = {

@@ -4,7 +4,7 @@ var socket = io();
 $( document ).ready(function() {
     $('select').formSelect();
     $('#password').bind("enterKey",function(e){
-        login();
+        loginButton();
     });
     $('#password').keyup(function(e){
         if(e.keyCode == 13)
@@ -14,21 +14,14 @@ $( document ).ready(function() {
     });
 });
 
+// Networking Stuff
 socket.on('connect', function(){
-    if (sessionStorage.userId) socket.emit('validateLogin', sessionStorage.userId);
+    if (sessionStorage.sessionToken) socket.emit('validateToken', sessionStorage.sessionToken);
     socket.emit('getUserList');
 });
 
-socket.on('validateSuccess', function (isMaster) { 
-    if (isMaster == true) { 
-        window.location = "/master";
-    } else {
-        window.location = "/quiz";
-    }
-});
-
 socket.on('loginSuccess', function(d) {
-    sessionStorage.userId = d.id;
+    sessionStorage.sessionToken = d.id;
     if (d.isMaster == true) { 
         window.location = "/master";
     } else {
@@ -41,38 +34,46 @@ socket.on('loginFailed', function(userId) {
     M.toast({html: 'Login Failed. Wrong Credentials?'});
 });
 
+socket.on('validateSuccess', function (isMaster) { 
+    if (isMaster == true) { 
+        window.location = "/master";
+    } else {
+        window.location = "/quiz";
+    }
+});
+
 socket.on('getUserList', function(userList) {
-    console.log(userList);
     if (userList != null) populateUserSelection(userList);
 });
 
+// Automated Scripts
+
 function populateUserSelection(userList) {
-    $('#userList').empty();
+    $('#user-list').empty();
     
-    $('#userList').append('<option value="" disabled selected>Select the user</option>');
+    $('#user-list').append('<option value="" disabled selected>Select the user</option>');
     for (let i = 0; i < userList.length; i++) {
-        $('#userList').append('<option value="'+userList[i]+'">'+userList[i]+'</option>');
+        $('#user-list').append('<option value="'+userList[i]+'">'+userList[i]+'</option>');
     }
 
     $('select').formSelect();
 }
 
-function refreshPage() {
+// Manual Button Scripts
+
+function refreshButton() {
     location.reload();
 }
 
-function login() {
-    var userData = {
-        name: "",
-        password: "",
-    }
-
-    if ($('#userList').val() && $('#password').val())  {
-        userData.name = $('#userList').val();
-        userData.password = $('#password').val();
-        socket.emit('userLogin', userData);
+function loginButton() {
+    if ($('#user-list').val() && $('#password').val())  {
+        var userData = {
+            name: $('#user-list').val(),
+            password: $('#password').val(),
+        };
+        socket.emit('loginUser', userData);
     } else {
-        M.toast({html: 'Please specify both a UserName and Password.'});
+        M.toast({html: 'Please specify both a Username and Password.'});
     }
 
 }

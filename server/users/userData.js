@@ -1,7 +1,8 @@
-var uidGen = require('rand-token').uid;
-let userFile = require('../quiz/users.json');
+var uidGenerator = require('rand-token').uid;
+let userFile = require('./../../data/users.json');
 
 let users = userFile.users.concat();
+initScores();
 
 exports.getUserList = function () {
     let nameList = [];
@@ -10,11 +11,10 @@ exports.getUserList = function () {
 }
 
 exports.loginUser = function (name, password) {
-    console.log(users)
     let id;
     users.forEach(u => {
         if (name == u.name && password == u.password) {
-            id = uidGen(16);
+            id = uidGenerator(16);
             u.id = id;
         }
     });
@@ -89,10 +89,6 @@ exports.lowerUserScore = function (id) {
     });
 }
 
-/*
-exports.setSocketId = function (userId, socketId) {
-    users.forEach(u => {
-        if (u.id == userId) u.socketId = socketId;
-    });
+function initScores () {
+    users.forEach(u => u.score = 0);
 }
-*/
