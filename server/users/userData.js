@@ -1,8 +1,12 @@
-var uidGenerator = require('rand-token').uid;
+var tokenGenerator = require('rand-token').uid;
 let userFile = require('./../../data/users.json');
 
 let users = userFile.users.concat();
 initScores();
+
+exports.getUserData = function () {
+    return users;
+}
 
 exports.getUserList = function () {
     let nameList = [];
@@ -11,35 +15,38 @@ exports.getUserList = function () {
 }
 
 exports.loginUser = function (name, password) {
-    let id;
+    let token;
     users.forEach(u => {
         if (name == u.name && password == u.password) {
-            id = uidGenerator(16);
-            u.id = id;
+            token = tokenGenerator(16);
+            u.token = token;
         }
     });
-    return id;
+    return token;
 }
 
-exports.validateId = function (id) {
+exports.validateToken = function (token) {
     let success = false;
     users.forEach(u => {
-        if (u.id == id) success = true;
+        if (u.token == token) success = true;
     });
     return success;
 }
 
-exports.getUserById = function (id) {
+exports.getUserByToken = function (token) {
     let gotUser = {};
     users.forEach(u => {
-        if (u.id == id) gotUser = u;
+        if (u.token == token) gotUser = u;
     });
     return gotUser;
 }
 
-exports.checkMaster = function (id) {
-    if (users[0].id == id) return true;
-    return null;
+exports.checkMaster = function (token) {
+    if (users[0].token == token) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 exports.getMasterInfo = function () {
@@ -48,7 +55,7 @@ exports.getMasterInfo = function () {
         if (u.name != users[0].name) {
             uList.push({
                 name: u.name,
-                id: u.id,
+                token: u.token,
                 input: u.input,
                 ready: u.ready,
                 score: u.score,
@@ -60,13 +67,13 @@ exports.getMasterInfo = function () {
 
 exports.updateInput = function (d) {
     users.forEach(u => {
-        if (u.id == d.id) u.input = d.input;
+        if (u.token == d.token) u.input = d.input;
     });
 }
 
 exports.updateReady = function (d) {
     users.forEach(u => {
-        if (u.id == d.id) u.ready = d.ready;
+        if (u.token == d.token) u.ready = d.ready;
     });
 }
 
@@ -77,18 +84,41 @@ exports.resetUserInputs = function () {
     });
 }
 
-exports.addUserScore = function (id) {
+exports.addUserScore = function (token) {
     users.forEach(u => {
-        if (u.id == id) u.score++;
+        if (u.token == token) u.score++;
     });
 }
 
-exports.lowerUserScore = function (id) {
+exports.lowerUserScore = function (token) {
     users.forEach(u => {
-        if (u.id == id) u.score--;
+        if (u.token == token) u.score--;
     });
 }
 
 function initScores () {
     users.forEach(u => u.score = 0);
+}
+
+exports.saveSocket = function (token, socketId) {
+    users.forEach(u => { 
+        if (u.token == token) u.socketId = socketId;
+    });
+}
+
+exports.getSocket = function (token) {
+    users.forEach(u => { 
+        if (u.token == token) return u.socketId;
+    });
+    return;
+}
+
+exports.getMasterSocket = function () {
+    return users[0].socketId;
+}
+
+exports.removeSocket = function (socketId) {
+    users.forEach(u => {
+        if (u.socketId == socketId) u.socketId = null;
+    });
 }

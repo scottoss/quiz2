@@ -4,12 +4,12 @@ const quizData = require('../quiz/quizData');
 
 exports.pageUpdates = function (socket) {
 
-	socket.on('requestUpdate', function (id) {
-		if (userData.checkMaster(id) == true) {
-			socket.emit('masterQuiz', quizHandler.getQuiz());
-			socket.emit('masterUsers', userHandler.getMasterInfo());
+	socket.on('requestUpdate', function (token) {
+		if (userData.checkMaster(token) == true) {
+			socket.emit('masterQuiz', quizData.getQuiz());
+			socket.emit('masterUsers', userData.getMasterInfo());
 		}
-		updateUserPage(socket, id);
+		updateUserPage(socket, token);
     });
 
 }
@@ -28,6 +28,6 @@ exports.input = function (socket) {
 
 }
 
-function updateUserPage (socket, userId) {
-	socket.emit('pageUpdate', quizData.getPageInfo(userId));
+function updateUserPage (socket, token) {
+	socket.emit('pageUpdate', quizData.getPageInfo(token));
 }

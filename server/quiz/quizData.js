@@ -17,11 +17,11 @@ let quizStatus = "question"; // "waiting", "score", "finished", "question", "ans
 generateLastAnswer();
 
 
-exports.getPageInfo = function (userId) {
+exports.getPageInfo = function (token) {
     let data = {
         user: {
-            name: userHandler.getUserById(userId).name,
-            score: userHandler.getUserById(userId).score,
+            name: userHandler.getUserByToken(token).name,
+            score: userHandler.getUserByToken(token).score,
         },
         quiz: {
             status: quizStatus,
@@ -94,7 +94,9 @@ function generateLastAnswer() {
 }
 
 exports.changeQuestion = function (dirCount) {
-    currentQuestion += dirCount;
+    if (0 <= (currentQuestion + dirCount) && (currentQuestion + dirCount) < quizData.length) {
+        currentQuestion += dirCount;
+    }
     if (quizStatus == "answer") quizStatus = "question";
     generateLastAnswer();
 }

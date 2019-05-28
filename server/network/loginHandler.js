@@ -5,9 +5,9 @@ const masterHandler = require('./masterHandler');
 exports.login = function (socket) {
 
     socket.on('loginUser', function(data){
-		let id = userData.loginUser(data.name, data.password);
-		if (id) {
-			socket.emit('loginSuccess', { id: id, isMaster: userData.checkMaster(id) });
+		let token = userData.loginUser(data.name, data.password);
+		if (token) {
+			socket.emit('loginSuccess', { token: token, isMaster: userData.checkMaster(token) });
 			masterHandler.updateUserInfo();
 		} else {
 			socket.emit('loginFailed');
@@ -20,11 +20,13 @@ exports.login = function (socket) {
 exports.validation = function (socket) {
 
 	socket.on('validateToken', function(token) {
-        if (userData.validateId(token) == true) {
-            
+        if (userData.validateToken(token) == true) {
+			
+			userData.saveSocket(token, socket.id);
             socket.emit('validationSuccess', userData.checkMaster(token));
             
 		} else {
+			userData.saveSocket(token, '');
 			socket.emit('validationFailed');
 		}
 	});

@@ -21,7 +21,7 @@ socket.on('connect', function(){
 });
 
 socket.on('loginSuccess', function(d) {
-    sessionStorage.sessionToken = d.id;
+    sessionStorage.sessionToken = d.token;
     if (d.isMaster == true) { 
         window.location = "/master";
     } else {
@@ -29,7 +29,7 @@ socket.on('loginSuccess', function(d) {
     }
 });
 
-socket.on('loginFailed', function(userId) {
+socket.on('loginFailed', function(token) {
     $('#password').val('');
     M.toast({html: 'Login Failed. Wrong Credentials?'});
 });

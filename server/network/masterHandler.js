@@ -1,20 +1,9 @@
-// Libraries / Frameworks
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
 // Other Modules
 const userData = require('../users/userData');
 const quizData = require('../quiz/quizData');
+exports.io;
 
 exports.pageUpdates = function (socket) {
-
-	socket.on('requestUpdate', function (token) {
-		if (userData.checkMaster(token) == true) {
-			socket.emit('masterQuiz', quizData.getQuiz());
-            socket.emit('masterUsers', userData.getMasterInfo());
-		}
-    });
 
 	socket.on('requestUserUpdate', function (token) {
 		if (userData.checkMaster(token) == true) {
@@ -40,13 +29,13 @@ exports.controls = function (socket) {
 	socket.on('nextQuestion', function () {
 		userData.resetUserInputs();
 		quizData.changeQuestion(1);
-		io.emit('resetInput');
+		module.exports.io.emit('resetInput');
 		updateAll();
 	});
 	socket.on('lastQuestion', function () {
 		userData.resetUserInputs();
 		quizData.changeQuestion(-1);
-		io.emit('resetInput');
+		module.exports.io.emit('resetInput');
 		updateAll();
 	});
 	socket.on('showAnswers', function (isRevealed) {
@@ -57,9 +46,20 @@ exports.controls = function (socket) {
 }
 
 exports.updateUserInfo = function () {
-	io.emit('masterUsers', userData.getMasterInfo());
+	let masterSocket = userData.getMasterSocket();
+	if (masterSocket) module.exports.io.to(masterSocket).emit('masterUsers', userData.getMasterInfo());
 }
 
 function updateAll() {
-	io.emit('notifyUpdate');
+	let users = userData.getUserData();
+	users.forEach(u => {
+		if (u.socketId) {
+			if (userData.checkMaster(u.token)) {
+				module.exports.io.to(u.socketId).emit('masterQuiz', quizData.getQuiz());
+				module.exports.io.to(u.socketId).emit('masterUsers', userData.getMasterInfo());
+			} else {
+				module.exports.io.to(u.socketId).emit('pageUpdate', quizData.getPageInfo(u.token));
+			}
+		}
+	});
 }

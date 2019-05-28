@@ -1,5 +1,5 @@
 // Imports
-var socket = io('/users');
+var socket = io();
 var quiz = {};
 var user = {};
 
@@ -124,22 +124,22 @@ function choiceSelect(nr) {
         $('#answer'+nr).addClass('active');
     }
     // Update Logic for this type goes here:
-    socket.emit('userInput', { input: nr, id: sessionStorage.sessionToken });
+    socket.emit('userInput', { input: nr, token: sessionStorage.sessionToken });
 }
 
 function submitUpdate() {
     if (quiz.type == "guess") {
-        socket.emit('userInput', { input: $('#guess-answer').val(), id: sessionStorage.sessionToken });
+        socket.emit('userInput', { input: $('#guess-answer').val(), token: sessionStorage.sessionToken });
     } else {
-        socket.emit('userInput', { input: $('#user-answer').val(), id: sessionStorage.sessionToken });
+        socket.emit('userInput', { input: $('#user-answer').val(), token: sessionStorage.sessionToken });
     }
 }
 
 function submitReady() {
     if ($('#ready').is(':checked')) {
-        socket.emit('userReady', { id: sessionStorage.sessionToken, ready: true });
+        socket.emit('userReady', { token: sessionStorage.sessionToken, ready: true });
     } else if ($('#ready')) {
-        socket.emit('userReady', { id: sessionStorage.sessionToken, ready: false });
+        socket.emit('userReady', { token: sessionStorage.sessionToken, ready: false });
     }
 }
 

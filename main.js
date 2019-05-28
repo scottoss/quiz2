@@ -9,6 +9,10 @@ var express = require('express');
 var loginHandler = require('./server/network/loginHandler');
 var userHandler = require('./server/network/userHandler');
 var masterHandler = require('./server/network/masterHandler');
+const userData = require('./server/users/userData');
+
+// Assign io() var in Submodules
+masterHandler.io = io;
 
 // ExpressJS Configuration
 app.use(express.static(path.join(__dirname, 'client')));
@@ -23,7 +27,7 @@ app.get('/master', function(req, res){
 	res.sendFile(path.join(__dirname, 'client/layout/master.html'));
 });
 
-io.of('/').on('connection', function (socket) {
+io.on('connection', function (socket) {
 
 	console.log('Connected client');	
 
@@ -31,26 +35,17 @@ io.of('/').on('connection', function (socket) {
 	loginHandler.validation(socket);
 	loginHandler.userList(socket);
 
-	socket.on('disconnect', function(){
-		console.log('Disconnected client');
-	});
-
-});
-
-io.of('/users').on('connection', function (socket) {
-
-	loginHandler.validation(socket);
 	userHandler.pageUpdates(socket);
 	userHandler.input(socket);
 
-});
-
-io.of('/master').on('connection', function (socket) {
-
-	loginHandler.validation(socket);
 	masterHandler.pageUpdates(socket);
 	masterHandler.controls(socket);
 	masterHandler.scores(socket);
+
+	socket.on('disconnect', function(){
+		userData.removeSocket(socket.id);
+		console.log('Disconnected client');
+	});
 
 });
 

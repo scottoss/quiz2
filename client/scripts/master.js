@@ -1,5 +1,5 @@
 // Imports
-var socket = io('/master');
+var socket = io();
 var users = [];
 var quiz = {};
 
@@ -15,7 +15,10 @@ socket.on('validationSuccess', function (isMaster) {
     socket.emit('requestUpdate', sessionStorage.sessionToken);
 });
 
-socket.on('validationFailed', function () { console.log("Validation failed."); window.location = "/" });
+socket.on('validationFailed', function () {
+    console.log("Validation failed.");
+    window.location = "/";
+});
 
 socket.on('notifyUpdate', function () {
     socket.emit('requestUpdate', sessionStorage.sessionToken);
@@ -78,7 +81,6 @@ function applyTemplate() {
             $('#answerSwitch').prop('checked', true);
             if (quiz.type == "choice") {
                 $('#answer'+quiz.trueAnswer).addClass("active");
-                // $('#answer'+quiz.trueAnswer).addClass("white-text");
             } else {
                 $('#answer-stage').removeAttr("hidden");
                 $('#trueAnswer').parent().removeAttr("hidden");
@@ -95,9 +97,9 @@ function updateScoreboard () {
     users.forEach(u => {
         let uHtml = $('#scoreboardUser').html();
         uHtml = uHtml.replace("USER", u.name + ": " + u.score);
-        if (u.id) {
-            uHtml = uHtml.replace('add_func=""', 'href=javascript:addScore("'+u.id+'")');
-            uHtml = uHtml.replace('low_func=""', 'href=javascript:lowerScore("'+u.id+'")');
+        if (u.token) {
+            uHtml = uHtml.replace('add_func=""', 'href=javascript:addScore("'+u.token+'")');
+            uHtml = uHtml.replace('low_func=""', 'href=javascript:lowerScore("'+u.token+'")');
         } else {
             uHtml = uHtml.replace("collection-item", "collection-item red-text");
         }
@@ -135,8 +137,8 @@ function updateAnswers () {
 function nextQuestion() { socket.emit('nextQuestion'); }
 function lastQuestion() { socket.emit('lastQuestion'); }
 
-function addScore(id) { socket.emit('addScore', id) }
-function lowerScore(id) { socket.emit('lowerScore', id) }
+function addScore(userToken) { socket.emit('addScore', userToken) }
+function lowerScore(userToken) { socket.emit('lowerScore', userToken) }
 
 function toggleAnswer() {
     let isActive = false;
