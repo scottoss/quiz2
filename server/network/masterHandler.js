@@ -38,10 +38,24 @@ exports.controls = function (socket) {
 		module.exports.io.emit('resetInput');
 		updateAll();
 	});
+
 	socket.on('showAnswers', function (isRevealed) {
 		quizData.revealAnswer(isRevealed);
 		updateAll();
-    });
+	});
+
+	socket.on('changeStatus', function (newStatus) {
+		if (newStatus == "next") {
+			userData.resetUserInputs();
+			quizData.changeQuestion(1);
+			module.exports.io.emit('resetInput');
+			quizData.changeStatus("question");
+			updateAll();
+		} else {
+			quizData.changeStatus(newStatus);
+			updateAll();
+		}
+  });
 
 }
 

@@ -17,26 +17,29 @@
 		<div class="nav-wrapper">
 		  <a class="brand-logo center">🎮 Abi-Gaming Quiz</a>
 		  <ul class="right">
+			<li id="scoreStatusButton" hidden><a onclick="changeStatus('score')"><i class="material-icons">format_list_numbered</i></a></li>
 			<li><a onclick="refreshPage()"><i class="material-icons">refresh</i></a></li>
 		  </ul>
 		</div>
 	</nav>
-	
+
 	<div id="pageContent" class="row container section">
 		<div class="progress">
             <div class="indeterminate"></div>
         </div>
     </div>
 
-    <div class="card-panel bottom-panel center">
-        <a class="waves-effect waves-light btn left" onclick="lastQuestion()"><i class="material-icons left">keyboard_arrow_left</i>last question</a>
-        <span class="new badge grey" data-badge-caption="" id="category"></span>
-        <span id="pageNumber"></span>
-        <label class="vert-center">
-            <input type="checkbox" class="filled-in" id="answerSwitch" onchange="toggleAnswer()">
-            <span>Show Answers</span>
-        </label>
-        <a class="waves-effect waves-light btn right" onclick="nextQuestion()"><i class="material-icons left">keyboard_arrow_right</i>next question</a>
+    <div id="bottom-panel">
+        <div class="card-panel bottom-panel center">
+            <a class="waves-effect waves-light btn left" onclick="lastQuestion()"><i class="material-icons left">keyboard_arrow_left</i>last question</a>
+            <span class="new badge grey" data-badge-caption="" id="category"></span>
+            <span id="pageNumber"></span>
+            <label class="vert-center">
+                <input type="checkbox" class="filled-in" id="answerSwitch" onchange="toggleAnswer()">
+                <span>Show Answers</span>
+            </label>
+            <a class="waves-effect waves-light btn right" onclick="nextQuestion()"><i class="material-icons left">keyboard_arrow_right</i>next question</a>
+        </div>
     </div>
 
 </body>
@@ -132,3 +135,44 @@
 <template id="scoreboardUser"><li class="collection-item">USER<a add_func="" class="secondary-content"><i class="material-icons">add_circle</i></a><a low_func="" class="secondary-content"><i class="material-icons">remove_circle_outline</i></a></li></template>
 
 <template id="answerUser"><li class="collection-item valign-wrapper">USER:<span style="margin-left: 8px; margin-right: 5px; font-weight: bold;">ANSWER</span></li></template>
+
+<template id="score-template">
+    <div class="container">
+        <div class="card-panel">
+            <div class="section">
+                <h5>Current Scores</h5>
+                <ul class="collection"></ul>
+            </div>
+            <div class="section">
+                <a onclick="changeStatus('question')" class="waves-effect waves-light btn white grey-text text-darken-4">back</a>
+                <a onclick="changeStatus('next')" class="waves-effect waves-light btn right"><i class="material-icons right">keyboard_arrow_right</i>next question</a>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="finished-template">
+    <div class="container">
+        <div class="card-panel">
+            <div class="section">
+                <h5>Final Results</h5>
+                <ul class="collection"></ul>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="scoreUser-template">
+    <li class="collection-item">USER</li>
+</template>
+
+<div id="finish-modal" class="modal">
+    <div class="modal-content">
+        <h4>Finish Quiz?</h4>
+        <p>This was the last question. By clicking "continue", you'll finish the quiz.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">cancel</a>
+        <a onclick="socket.emit('nextQuestion')" class="modal-close waves-effect waves-green btn-flat">continue</a>
+    </div>
+</div>

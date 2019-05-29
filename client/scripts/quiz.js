@@ -2,6 +2,7 @@
 var socket = io();
 var quiz = {};
 var user = {};
+var users = [];
 
 socket.on('connect', function(){
     if (!sessionStorage.sessionToken) window.location = "/";
@@ -55,21 +56,18 @@ socket.on('pageUpdate', function(data) {
             setTemplate();
         }
     }
+    if (data.users) users = data.users;
+    
+    $('#question').html(quiz.question);
 
     if (quiz.type == "choice") {
-        $('#question').html(quiz.question);
         $('#answer1').html(quiz.answer1);
         $('#answer2').html(quiz.answer2);
         $('#answer3').html(quiz.answer3);
         $('#answer4').html(quiz.answer4);
     }
 
-    if (quiz.type == "free") {
-        $('#question').html(quiz.question);
-    }
-
     if (quiz.type == "guess") {
-        $('#question').html(quiz.question);
         var range = quiz.other.split("-");
         $('#guess-answer').attr("min", range[0]);
         $('#guess-answer').attr("max", range[1]);
@@ -86,6 +84,19 @@ socket.on('pageUpdate', function(data) {
     }
 
     if (quiz.status != "score") $('#score').html(user.score);
+
+    if (quiz.status == "score" || quiz.status == "finished") {
+        let html = "";
+        users.sort(function(a,b){
+            return b.score-a.score;
+        });
+        users.forEach(u => {
+            let userHtml = $('#scoreUser-template').html();
+            userHtml = userHtml.replace("USER", u.name + ": " + u.score);
+            html += userHtml;
+        });
+        $('#page-content .collection').html(html);
+    }
 
     if (quiz.status == "question") {
         $('#trueAnswer').parent().attr("hidden", "hidden");

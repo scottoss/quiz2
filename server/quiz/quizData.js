@@ -1,7 +1,7 @@
 // Import Libraries and Modules
 const fileSystem = require('fs');
 const csvParser = require('csvsync');
-const userHandler = require('../users/userData');
+const userData = require('../users/userData');
 
 // Import Quiz Data
 let csvFile = fileSystem.readFileSync('data/quiz.csv');
@@ -20,8 +20,8 @@ generateLastAnswer();
 exports.getPageInfo = function (token) {
     let data = {
         user: {
-            name: userHandler.getUserByToken(token).name,
-            score: userHandler.getUserByToken(token).score,
+            name: userData.getUserByToken(token).name,
+            score: userData.getUserByToken(token).score,
         },
         quiz: {
             status: quizStatus,
@@ -50,6 +50,19 @@ exports.getPageInfo = function (token) {
         if (quizData[currentQuestion].type == "yt") {
             data.quiz.other = quizData[currentQuestion].other;
         }
+    }
+    if (quizStatus == "score" || quizStatus == "finished") {
+        let uList = [];
+        let users = userData.getUserData();
+        users.forEach(u => {
+            if (u.name != users[0].name) {
+                uList.push({
+                    name: u.name,
+                    score: u.score,
+                });
+            }
+        });
+        data.users = uList;
     }
     // TODO: Implement Scoring
     return data;
@@ -96,6 +109,8 @@ function generateLastAnswer() {
 exports.changeQuestion = function (dirCount) {
     if (0 <= (currentQuestion + dirCount) && (currentQuestion + dirCount) < quizData.length) {
         currentQuestion += dirCount;
+    } else if ((currentQuestion + dirCount) >= quizData.length) {
+        quizStatus = "finished";
     }
     if (quizStatus == "answer") quizStatus = "question";
     generateLastAnswer();
@@ -106,5 +121,11 @@ exports.revealAnswer = function (isRevealed) {
         quizStatus = "answer";
     } else {
         quizStatus = "question";
+    }
+}
+
+exports.changeStatus = function (newStatus) {
+    if (newStatus == "question" || newStatus == "answer" || newStatus == "score" || newStatus == "waiting" || newStatus == "finished") {
+        quizStatus = newStatus;
     }
 }

@@ -55,7 +55,7 @@
         <div class="section">
             <h5 class="header">Your Answer</h5>
             <div class="input-field" hidden>
-                <input id="user-answer" onkeyup="submitUpdate()" type="text" class="validate">
+                <input id="user-answer" maxlength="34" onkeyup="submitUpdate()" type="text" class="validate">
                 <label for="user-answer">Live Answer</label>
             </div>
             <div id="guess-type" class="input-field" hidden>
@@ -78,6 +78,32 @@
         <div class="section" hidden>
             <h5 class="header">True Answer</h5>
             <h6 id="trueAnswer" class="blue-text"></h6>
+        </div>
+    </div>
+</template>
+
+<template id="score-template">
+    <div class="container">
+        <div class="card-panel">
+            <div class="section">
+                <h5>Current Scores</h5>
+                <ul class="collection"></ul>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="scoreUser-template">
+    <li class="collection-item">USER</li>
+</template>
+
+<template id="finished-template">
+    <div class="container">
+        <div class="card-panel">
+            <div class="section">
+                <h5>Final Results</h5>
+                <ul class="collection"></ul>
+            </div>
         </div>
     </div>
 </template>

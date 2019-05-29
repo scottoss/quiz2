@@ -3,6 +3,10 @@ var socket = io();
 var users = [];
 var quiz = {};
 
+$(document).ready(function(){
+    $('#finish-modal').modal();
+});
+
 socket.on('connect', function(){
     if (!sessionStorage.sessionToken) window.location = "/";
     if (sessionStorage.sessionToken) socket.emit('validateToken', sessionStorage.sessionToken);
@@ -66,10 +70,25 @@ function updateQuizInfo () {
 }
 
 function applyTemplate() {
-    if (quiz.status == "waiting") $('#pageContent').html($('#waiting-template').html());
-    if (quiz.status == "score") $('#pageContent').html($('#score-template').html());
-    if (quiz.status == "finished") $('#pageContent').html($('#finished-template').html());
+    if (quiz.status == "waiting") {
+        $('#pageContent').html($('#waiting-template').html());
+        $('#scoreStatusButton').prop('hidden', true);
+        $('#bottom-panel').prop('hidden', true);
+    }
+    if (quiz.status == "score") {
+        $('#pageContent').html($('#score-template').html());
+        $('#scoreStatusButton').prop('hidden', true);
+        $('#bottom-panel').prop('hidden', true);
+    }
+    if (quiz.status == "finished") {
+        $('#pageContent').html($('#finished-template').html());
+        $('#scoreStatusButton').prop('hidden', true);
+        $('#bottom-panel').prop('hidden', true);
+    }
     if (quiz.status == "question" || quiz.status == "answer") {
+        $('#scoreStatusButton').prop('hidden', false);
+        $('#bottom-panel').prop('hidden', false);
+
         $('#pageContent').html($('#ingame-template').html());
 
         if (quiz.type == "choice") $('#choice-type').removeAttr("hidden");
@@ -93,19 +112,33 @@ function applyTemplate() {
 }
 
 function updateScoreboard () {
-    let html = "";
-    users.forEach(u => {
-        let uHtml = $('#scoreboardUser').html();
-        uHtml = uHtml.replace("USER", u.name + ": " + u.score);
-        if (u.token) {
-            uHtml = uHtml.replace('add_func=""', 'href=javascript:addScore("'+u.token+'")');
-            uHtml = uHtml.replace('low_func=""', 'href=javascript:lowerScore("'+u.token+'")');
-        } else {
-            uHtml = uHtml.replace("collection-item", "collection-item red-text");
-        }
-        html += uHtml;
-    });
-    $('#scoreboard').html(html);
+    if (quiz.status == "question" || quiz.status == "answer") {
+        let html = "";
+        users.forEach(u => {
+            let uHtml = $('#scoreboardUser').html();
+            uHtml = uHtml.replace("USER", u.name + ": " + u.score);
+            if (u.token) {
+                uHtml = uHtml.replace('add_func=""', 'href=javascript:addScore("'+u.token+'")');
+                uHtml = uHtml.replace('low_func=""', 'href=javascript:lowerScore("'+u.token+'")');
+            } else {
+                uHtml = uHtml.replace("collection-item", "collection-item red-text");
+            }
+            html += uHtml;
+        });
+        $('#scoreboard').html(html);
+    }
+    if (quiz.status == "score" || quiz.status == "finished") {
+        let html = "";
+        users.sort(function(a,b){
+            return b.score-a.score;
+        });
+        users.forEach(u => {
+            let userHtml = $('#scoreUser-template').html();
+            userHtml = userHtml.replace("USER", u.name + ": " + u.score);
+            html += userHtml;
+        });
+        $('#pageContent .collection').html(html);
+    }
 }
 
 function updateAnswers () {
@@ -134,7 +167,15 @@ function updateAnswers () {
 
 // Manual Stuff (Controls):
 
-function nextQuestion() { socket.emit('nextQuestion'); }
+function nextQuestion() {
+    let pageInfo = quiz.currentPage.split("/");
+    console.log(pageInfo);
+    if (pageInfo[0] == pageInfo[1]) {
+        $('#finish-modal').modal("open");
+    } else {
+        socket.emit('nextQuestion');
+    }
+}
 function lastQuestion() { socket.emit('lastQuestion'); }
 
 function addScore(userToken) { socket.emit('addScore', userToken) }
@@ -146,4 +187,15 @@ function toggleAnswer() {
         isActive = true;
     }
     socket.emit('showAnswers', isActive);
+}
+
+function changeStatus(newStatus) {
+    if (newStatus == "score") {
+        socket.emit('changeStatus', newStatus);
+        $('#scoreStatusButton').prop('hidden', true);
+    }
+    if (newStatus == "question" || newStatus == "next") {
+        socket.emit('changeStatus', newStatus);
+        $('#scoreStatusButton').prop('hidden', false);
+    }
 }
