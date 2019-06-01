@@ -4,9 +4,9 @@ A simple NodeJS quiz server using ExpressJS and Socket.io
 ### Structure
 
 - `client` (All files delivered to clients)
-- `quiz` (Quiz-Questions-Spreadsheet & )
+- `data` (Your custom quiz data, Questions and Users)
+- `sass` (To-Compile Stylesheets)
 - `server` (All the server logic)
-- `data` (Your custom quiz data)
 
 ### Installation
 
@@ -45,7 +45,7 @@ There are 5 different question-types:
    {
        "users":[
            {"name":"GameMaster","password":"SomePassword"},
-           {"name":"RoKa","password":"User1pw"},
+           {"name":"User1","password":"User1pw"},
            {"name":"User2","password":"User2pw"},
            {"name":"User3","password":"User3pw"}
        ]

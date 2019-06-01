@@ -1,0 +1,8 @@
+{
+    "users":[
+        {"name":"GameMaster","password":"GameMaster"},
+        {"name":"User1","password":"User1"},
+        {"name":"User2","password":"User2"},
+        {"name":"User3","password":"User3"}
+    ]
+}
