@@ -54,3 +54,10 @@ There are 5 different question-types:
 
    The first one will get to be the gamemaster.
 
+There are four **Joker-Types**:
+- `timeout` - Will induce a 10 second timeout for everybody
+- `2x` - Will grant double points for current question
+- `poll` - Will start a poll in Livestream
+- `3x` - Will grant triple points for any player.
+
+*All Jokers are currently executed by the GameMaster.*

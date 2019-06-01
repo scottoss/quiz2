@@ -10,7 +10,7 @@
     "socket.io": "^2.1.1"
   },
   "license": "MIT",
-  "scripts" : {
-    "start" : "sass sass:client/styles && node main.js"
+  "scripts": {
+    "start": "sass sass:client/styles && node main.js"
   }
 }

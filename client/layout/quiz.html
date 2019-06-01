@@ -21,12 +21,29 @@
             <ul class="left"><li><a>Score: <span id="score"></span></a></li></ul>
 		    <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
 		    <ul class="right"><li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li></ul>
+		    <ul id="joker-button" class="right" hidden><li><a onclick="openJokerModal()"><i class="material-icons grey-text text-darken-4">card_giftcard</i></a></li></ul>
 		</div>
 	</nav>
 	<!-- Interchangable Content -->
 	<div class="container section" id="page-content">
 		<div class="progress white">
             <div class="indeterminate blue"></div>
+        </div>
+    </div>
+    
+
+    <div id="joker-modal" class="modal">
+        <div class="modal-content">
+            <h4>Select a Joker:</h4>
+            <div class="collection">
+                <a onclick="selectJoker('timeout')" class="collection-item modal-close"><i class="material-icons left">av_timer</i>Timeout <span id="joker-timeout-amount"></span></a>
+                <a onclick="selectJoker('2x')" class="collection-item modal-close"><i class="material-icons left">filter_2</i>2x Punkte <span id="joker-2x-amount"></span></a>
+                <a onclick="selectJoker('poll')" class="collection-item modal-close"><i class="material-icons left">poll</i>Stream Abstimmung <span id="joker-poll-amount"></span></a>
+                <a onclick="selectJoker('3x')" class="collection-item modal-close"><i class="material-icons left">filter_3</i>3x Punkte <span id="joker-3x-amount"></span></a>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
         </div>
     </div>
 </body>

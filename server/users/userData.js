@@ -2,7 +2,7 @@ var tokenGenerator = require('rand-token').uid;
 let userFile = require('./../../data/users.json');
 
 let users = userFile.users.concat();
-initScores();
+initUsers();
 
 exports.getUserData = function () {
     return users;
@@ -59,6 +59,8 @@ exports.getMasterInfo = function () {
                 input: u.input,
                 ready: u.ready,
                 score: u.score,
+                jokers: u.jokers,
+                activeJoker: u.activeJoker,
             });
         }
     });
@@ -96,8 +98,11 @@ exports.lowerUserScore = function (token) {
     });
 }
 
-function initScores () {
-    users.forEach(u => u.score = 0);
+function initUsers () {
+    users.forEach(u => {
+        u.score = 0;
+        u.jokers = [];
+    });
 }
 
 exports.saveSocket = function (token, socketId) {
@@ -120,5 +125,42 @@ exports.getMasterSocket = function () {
 exports.removeSocket = function (socketId) {
     users.forEach(u => {
         if (u.socketId == socketId) u.socketId = null;
+    });
+}
+
+exports.addJoker = function (token, jokerType) {
+    users.forEach(u => {
+        if (u.token == token) {
+            u.jokers.push(jokerType);
+        }
+    });
+}
+
+exports.useJoker = function (token, jokerType) {
+    let isUsed = false;
+    users.forEach(u => {
+        if (u.token == token) {
+            if (u.activeJoker == "" || u.activeJoker == null) {
+                for (i = 0; i < u.jokers.length; u++) {
+                    if (u.jokers[i] == jokerType) {
+                        isUsed = true;
+                        u.activeJoker = u.jokers[i];
+                        u.jokers.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+    });
+    if (isUsed == true) {
+        return true;
+    } else {
+        return;
+    }
+}
+
+exports.clearJokers = function () {
+    users.forEach(u => {
+        u.activeJoker = null;
     });
 }

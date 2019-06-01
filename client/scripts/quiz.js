@@ -4,6 +4,10 @@ var quiz = {};
 var user = {};
 var users = [];
 
+$(document).ready(function(){
+    $('#joker-modal').modal();
+});
+
 socket.on('connect', function(){
     if (!sessionStorage.sessionToken) window.location = "/";
     if (sessionStorage.sessionToken) socket.emit('validateToken', sessionStorage.sessionToken);
@@ -27,6 +31,10 @@ socket.on('resetInput', function () {
 
 socket.on('notifyUpdate', function () {
     socket.emit('requestUpdate', sessionStorage.sessionToken);
+});
+
+socket.on('broadcast', function(msg) {
+    M.toast({html: msg});
 });
 
 function refreshPage () { location.reload() } 
@@ -111,7 +119,44 @@ socket.on('pageUpdate', function(data) {
         }
     }
 
+    if (user.jokers.length >= 0) {
+        if (countStringInArray(user.jokers, "timeout") > 0) {
+            $("#joker-timeout-amount").html("("+countStringInArray(user.jokers, "timeout")+"x)");
+            $("#joker-timeout-amount").parent().removeClass("grey-text");
+        } else {
+            $("#joker-timeout-amount").parent().addClass("grey-text");
+        }
+        if (countStringInArray(user.jokers, "2x") > 0) {
+            $("#joker-2x-amount").html("("+countStringInArray(user.jokers, "2x")+"x)");
+            $("#joker-2x-amount").parent().removeClass("grey-text");
+        } else {
+            $("#joker-2x-amount").parent().addClass("grey-text");
+        }
+        if (countStringInArray(user.jokers, "poll") > 0) {
+            $("#joker-poll-amount").html("("+countStringInArray(user.jokers, "poll")+"x)");
+            $("#joker-poll-amount").parent().removeClass("grey-text");
+        } else {
+            $("#joker-poll-amount").parent().addClass("grey-text");
+        }
+        if (countStringInArray(user.jokers, "3x") > 0) {
+            $("#joker-3x-amount").html("("+countStringInArray(user.jokers, "3x")+"x)");
+            $("#joker-3x-amount").parent().removeClass("grey-text");
+        } else {
+            $("#joker-3x-amount").parent().addClass("grey-text");
+        }
+    }
+
 });
+
+function countStringInArray(arrayData, countString) {
+    var count = 0;
+    arrayData.forEach(d => {
+        if (d == countString) {
+            count++;
+        }
+    });
+    return count;
+}
 
 function setTemplate() {
     if (quiz.status == "waiting") $('#page-content').html($('#waiting-template').html());
@@ -119,6 +164,7 @@ function setTemplate() {
     if (quiz.status == "finished") $('#page-content').html($('#finished-template').html());
     
     if (quiz.status == "question" || quiz.status == "answer") {
+        $("#joker-button").prop("hidden", false);
         $('#page-content').html($('#quiz-template').html());
 
         if (quiz.type == "image") $('#image-type').removeAttr("hidden");
@@ -126,6 +172,8 @@ function setTemplate() {
         if (quiz.type == "choice") $('#choice-type').removeAttr("hidden");
         if (quiz.type == "guess") $('#guess-type').removeAttr("hidden");
         if (quiz.type != "choice" && quiz.type != "guess") $('#user-answer').parent().removeAttr("hidden");
+    } else {
+        $("#joker-button").prop("hidden", true);
     }
 }
 
@@ -156,4 +204,12 @@ function submitReady() {
 
 function updateReflection() {
     $('#guess-answer-reflection').html($('#guess-answer').val());
+}
+
+function openJokerModal () {
+    $("#joker-modal").modal("open");
+}
+
+function selectJoker (type) {
+    socket.emit('useJoker', { jokerType: type, token: sessionStorage.sessionToken });
 }

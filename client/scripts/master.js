@@ -5,11 +5,17 @@ var quiz = {};
 
 $(document).ready(function(){
     $('#finish-modal').modal();
+    $('#joker-modal').modal();
+    $('#joker-user-modal').modal();
 });
 
 socket.on('connect', function(){
     if (!sessionStorage.sessionToken) window.location = "/";
     if (sessionStorage.sessionToken) socket.emit('validateToken', sessionStorage.sessionToken);
+});
+
+socket.on('broadcast', function(msg) {
+    M.toast({html: msg});
 });
 
 socket.on('validationSuccess', function (isMaster) { 
@@ -155,6 +161,17 @@ function updateAnswers () {
         } else {
             uHtml = uHtml.replace('ANSWER', '~');
         }
+        if (u.activeJoker == "timeout") {
+            uHtml = uHtml.replace('JOKER', '<i class="material-icons blue-text">av_timer</i>');
+        } else if (u.activeJoker == "2x") {
+            uHtml = uHtml.replace('JOKER', '<i class="material-icons blue-text">filter_2</i>');
+        } else if (u.activeJoker == "poll") {
+            uHtml = uHtml.replace('JOKER', '<i class="material-icons blue-text">poll</i>');
+        } else if (u.activeJoker == "3x") {
+            uHtml = uHtml.replace('JOKER', '<i class="material-icons blue-text">filter_3</i>');
+        } else {
+            uHtml = uHtml.replace('JOKER', '');
+        }
         if (u.ready == true) {
             uHtml = uHtml.replace('</li>','<i class="material-icons">check_box</i></li>');
         } else {
@@ -197,5 +214,31 @@ function changeStatus(newStatus) {
     if (newStatus == "question" || newStatus == "next") {
         socket.emit('changeStatus', newStatus);
         $('#scoreStatusButton').prop('hidden', false);
+    }
+}
+
+function selectJoker(type) {
+    if (type == "timeout" || type == "2x" || type == "poll" || type == "3x") {
+        $("#joker-user-modal").data("jokerType", type);
+        var uHtml = "";
+        users.forEach(u => {
+            var html = $("#joker-user-template").html();
+            if (u.token) {
+                html = html.replace("TOKEN", u.token);
+            } else {
+                html = html.replace("selectJokerUser('TOKEN')", "M.toast({html: '"+ u.name +" is currently not logged in!'})");
+            }
+            html = html.replace("NAME", u.name);
+            uHtml += html;
+        });
+        $("#joker-user-modal .collection").html(uHtml);
+        $("#joker-user-modal").modal("open");
+    }
+}
+
+function selectJokerUser(token) {
+    var jokerType = $("#joker-user-modal").data("jokerType");
+    if (jokerType) {
+        socket.emit('addJoker', { token: token, jokerType: jokerType })
     }
 }

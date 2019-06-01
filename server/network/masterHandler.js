@@ -55,14 +55,27 @@ exports.controls = function (socket) {
 			quizData.changeStatus(newStatus);
 			updateAll();
 		}
-  });
+	});
+	  
+	socket.on('addJoker', function (data) {
+		userData.addJoker(data.token, data.jokerType);
+		updateAll();
+	});
 
+}
+
+exports.broadcastMsg = (msg) => broadcastMsg(msg);
+
+function broadcastMsg (msg) {
+	module.exports.io.emit('broadcast', msg)
 }
 
 exports.updateUserInfo = function () {
 	let masterSocket = userData.getMasterSocket();
 	if (masterSocket) module.exports.io.to(masterSocket).emit('masterUsers', userData.getMasterInfo());
 }
+
+exports.updateAll = () => updateAll();
 
 function updateAll() {
 	let users = userData.getUserData();

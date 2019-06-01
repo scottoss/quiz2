@@ -24,7 +24,14 @@ exports.input = function (socket) {
 	socket.on('userReady', function (d) {
 		userData.updateReady(d);
 		masterHandler.updateUserInfo();
-    });
+	});
+	
+	socket.on('useJoker', function (d) {
+		if (userData.useJoker(d.token, d.jokerType) == true) {
+			masterHandler.updateAll();
+			masterHandler.broadcastMsg(userData.getUserByToken(d.token).name + " used a " + d.jokerType + " joker!");
+		}
+	}); 
 
 }
 

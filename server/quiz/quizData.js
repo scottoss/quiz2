@@ -13,15 +13,15 @@ let quizData = csvParser.parse(csvFile, {
 
 // Init variables
 let currentQuestion = 0;
-let quizStatus = "question"; // "waiting", "score", "finished", "question", "answer"
+let quizStatus = "waiting"; // "waiting", "score", "finished", "question", "answer"
 generateLastAnswer();
-
 
 exports.getPageInfo = function (token) {
     let data = {
         user: {
             name: userData.getUserByToken(token).name,
             score: userData.getUserByToken(token).score,
+            jokers: userData.getUserByToken(token).jokers,
         },
         quiz: {
             status: quizStatus,
@@ -113,6 +113,7 @@ exports.changeQuestion = function (dirCount) {
         quizStatus = "finished";
     }
     if (quizStatus == "answer") quizStatus = "question";
+    userData.clearJokers();
     generateLastAnswer();
 }
 
