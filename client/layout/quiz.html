@@ -1,126 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
-    <!-- Meta -->
-	<title>Quiz</title>
-	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <!-- Styling -->
-	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="styles/materialize.css">
-    <!-- Scripts -->
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="scripts/quiz.js"></script>
+  <!-- Meta -->
+  <title>Quiz</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <!-- Styling -->
+  <link
+    rel="shortcut icon"
+    type="image/x-icon"
+    href="assets/icons/favicon.ico"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles/materialize.css" />
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts/quiz.js"></script>
 </head>
 
 <body>
-	<nav class="white">
-		<div class="nav-wrapper">
-            <ul class="left"><li><a>Score: <span id="score"></span></a></li></ul>
-		    <a class="brand-logo center grey-text text-darken-4">🎮 Abi-Gaming Quiz</a>
-		    <ul class="right"><li><a onclick="refreshPage()"><i class="material-icons grey-text text-darken-4">refresh</i></a></li></ul>
-		    <ul id="joker-button" class="right" hidden><li><a onclick="openJokerModal()"><i class="material-icons grey-text text-darken-4">card_giftcard</i></a></li></ul>
-		</div>
-	</nav>
-	<!-- Interchangable Content -->
-	<div class="container section" id="page-content">
-		<div class="progress white">
-            <div class="indeterminate blue"></div>
-        </div>
+  <nav class="white">
+    <div class="nav-wrapper">
+      <ul class="left">
+        <li>
+          <a>Score: <span id="score"></span></a>
+        </li>
+      </ul>
+      <a class="brand-logo center grey-text text-darken-4">Quiz Battle ⚡</a>
+      <ul class="right">
+        <li>
+          <a onclick="refreshPage()"
+            ><i class="material-icons grey-text text-darken-4">refresh</i></a
+          >
+        </li>
+      </ul>
+      <ul id="joker-button" class="right" hidden>
+        <li>
+          <a onclick="openJokerModal()"
+            ><i class="material-icons grey-text text-darken-4"
+              >card_giftcard</i
+            ></a
+          >
+        </li>
+      </ul>
     </div>
-    
+  </nav>
+  <!-- Interchangable Content -->
+  <div class="container section" id="page-content">
+    <div class="progress white">
+      <div class="indeterminate blue"></div>
+    </div>
+  </div>
 
-    <div id="joker-modal" class="modal">
-        <div class="modal-content">
-            <h4>Select a Joker:</h4>
-            <div class="collection">
-                <a onclick="selectJoker('timeout')" class="collection-item modal-close"><i class="material-icons left">av_timer</i>Timeout <span id="joker-timeout-amount"></span></a>
-                <a onclick="selectJoker('2x')" class="collection-item modal-close"><i class="material-icons left">filter_2</i>2x Punkte <span id="joker-2x-amount"></span></a>
-                <a onclick="selectJoker('poll')" class="collection-item modal-close"><i class="material-icons left">poll</i>Stream Abstimmung <span id="joker-poll-amount"></span></a>
-                <a onclick="selectJoker('3x')" class="collection-item modal-close"><i class="material-icons left">filter_3</i>3x Punkte <span id="joker-3x-amount"></span></a>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-        </div>
+  <div id="joker-modal" class="modal">
+    <div class="modal-content">
+      <h4>Select a Joker:</h4>
+      <div class="collection">
+        <a onclick="selectJoker('timeout')" class="collection-item modal-close"
+          ><i class="material-icons left">av_timer</i>Timeout
+          <span id="joker-timeout-amount"></span
+        ></a>
+        <a onclick="selectJoker('2x')" class="collection-item modal-close"
+          ><i class="material-icons left">filter_2</i>2x Punkte
+          <span id="joker-2x-amount"></span
+        ></a>
+        <a onclick="selectJoker('poll')" class="collection-item modal-close"
+          ><i class="material-icons left">poll</i>Stream Abstimmung
+          <span id="joker-poll-amount"></span
+        ></a>
+        <a onclick="selectJoker('3x')" class="collection-item modal-close"
+          ><i class="material-icons left">filter_3</i>3x Punkte
+          <span id="joker-3x-amount"></span
+        ></a>
+      </div>
     </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+        >Close</a
+      >
+    </div>
+  </div>
 </body>
 
 <template id="waiting-template">
-    <div class="row">
-        <div class="card-panel">
-            <h5 class="header">Waiting for Start...</h5>
-            <p>When all users are connected, the game will start.</p>
-        </div>
+  <div class="row">
+    <div class="card-panel">
+      <h5 class="header">Waiting for Start...</h5>
+      <p>When all users are connected, the game will start.</p>
     </div>
+  </div>
 </template>
 
 <template id="quiz-template">
-    <div class="row">
-        <div class="card-panel">
-            <div id="image-type" class="section" hidden>
-                <img class="materialboxed" id="image" alt="Loading..." width="100%" src="">
-            </div>
-            <div id="yt-type" class="video-container" hidden>
-                <iframe id="video" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <h5 class="header">Question</h5>
-            <h6 id="question" class="text-blue"></h6>
-        </div>
-        <div class="section">
-            <h5 class="header">Your Answer</h5>
-            <div class="input-field" hidden>
-                <input id="user-answer" maxlength="34" onkeyup="submitUpdate()" type="text" class="validate">
-                <label for="user-answer">Live Answer</label>
-            </div>
-            <div id="guess-type" class="input-field" hidden>
-                <p class="range-field">
-                    <input type="range" oninput="updateReflection()" onchange="submitUpdate()" id="guess-answer" min="0" max="100" />
-                </p>
-                <p id="guess-answer-reflection" class="blue-text"></p>
-            </div>
-            <div id="choice-type" class="collection" hidden>
-                <a onclick="choiceSelect(1)" class="collection-item" id="answer1"></a>
-                <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
-                <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
-                <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
-            </div>
-            <label>
-                <input type="checkbox" id="ready" onchange="submitReady()" class="filled-in">
-                <span>Ready</span>
-            </label>
-        </div>
-        <div class="section" hidden>
-            <h5 class="header">True Answer</h5>
-            <h6 id="trueAnswer" class="blue-text"></h6>
-        </div>
+  <div class="row">
+    <div class="card-panel">
+      <div id="image-type" class="section" hidden>
+        <img
+          class="materialboxed"
+          id="image"
+          alt="Loading..."
+          width="100%"
+          src=""
+        />
+      </div>
+      <div id="yt-type" class="video-container" hidden>
+        <iframe
+          id="video"
+          src=""
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <h5 class="header">Question</h5>
+      <h6 id="question" class="text-blue"></h6>
     </div>
+    <div class="section">
+      <h5 class="header">Your Answer</h5>
+      <div class="input-field" hidden>
+        <input
+          id="user-answer"
+          maxlength="34"
+          onkeyup="submitUpdate()"
+          type="text"
+          class="validate"
+        />
+        <label for="user-answer">Live Answer</label>
+      </div>
+      <div id="guess-type" class="input-field" hidden>
+        <p class="range-field">
+          <input
+            type="range"
+            oninput="updateReflection()"
+            onchange="submitUpdate()"
+            id="guess-answer"
+            min="0"
+            max="100"
+          />
+        </p>
+        <p id="guess-answer-reflection" class="blue-text"></p>
+      </div>
+      <div id="choice-type" class="collection" hidden>
+        <a onclick="choiceSelect(1)" class="collection-item" id="answer1"></a>
+        <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
+        <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
+        <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
+      </div>
+      <label>
+        <input
+          type="checkbox"
+          id="ready"
+          onchange="submitReady()"
+          class="filled-in"
+        />
+        <span>Ready</span>
+      </label>
+    </div>
+    <div class="section" hidden>
+      <h5 class="header">True Answer</h5>
+      <h6 id="trueAnswer" class="blue-text"></h6>
+    </div>
+  </div>
 </template>
 
 <template id="score-template">
-    <div class="container">
-        <div class="card-panel">
-            <div class="section">
-                <h5>Current Scores</h5>
-                <ul class="collection"></ul>
-            </div>
-        </div>
+  <div class="container">
+    <div class="card-panel">
+      <div class="section">
+        <h5>Current Scores</h5>
+        <ul class="collection"></ul>
+      </div>
     </div>
+  </div>
 </template>
 
 <template id="scoreUser-template">
-    <li class="collection-item">USER</li>
+  <li class="collection-item">USER</li>
 </template>
 
 <template id="finished-template">
-    <div class="container">
-        <div class="card-panel">
-            <div class="section">
-                <h5>Final Results</h5>
-                <ul class="collection"></ul>
-            </div>
-        </div>
+  <div class="container">
+    <div class="card-panel">
+      <div class="section">
+        <h5>Final Results</h5>
+        <ul class="collection"></ul>
+      </div>
     </div>
+  </div>
 </template>

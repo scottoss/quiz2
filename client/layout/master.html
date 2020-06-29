@@ -1,90 +1,127 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
-	<title>Quiz</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, user-scalable=no" />
-	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="styles/materialize.css">
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="scripts/master.js"></script>
+  <title>Quiz</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link
+    rel="shortcut icon"
+    type="image/x-icon"
+    href="assets/icons/favicon.ico"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles/materialize.css" />
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts/master.js"></script>
 </head>
 
 <body>
-	<nav>
-		<div class="nav-wrapper">
-		  <a class="brand-logo center">🎮 Abi-Gaming Quiz</a>
-		  <ul class="right">
-			<li id="scoreStatusButton" hidden><a onclick="changeStatus('score')"><i class="material-icons">format_list_numbered</i></a></li>
-			<li><a onclick="refreshPage()"><i class="material-icons">refresh</i></a></li>
-		  </ul>
-		</div>
-	</nav>
-
-	<div id="pageContent" class="row container section">
-		<div class="progress">
-            <div class="indeterminate"></div>
-        </div>
+  <nav>
+    <div class="nav-wrapper">
+      <a class="brand-logo center">Quiz Battle ⚡</a>
+      <ul class="right">
+        <li id="scoreStatusButton" hidden>
+          <a onclick="changeStatus('score')"
+            ><i class="material-icons">format_list_numbered</i></a
+          >
+        </li>
+        <li>
+          <a onclick="refreshPage()"><i class="material-icons">refresh</i></a>
+        </li>
+      </ul>
     </div>
+  </nav>
 
-    <div id="bottom-panel">
-        <div class="card-panel bottom-panel center">
-            <a class="waves-effect waves-light btn left" onclick="lastQuestion()"><i class="material-icons left">keyboard_arrow_left</i>last question</a>
-            <span class="new badge grey" data-badge-caption="" id="category"></span>
-            <span id="pageNumber"></span>
-            <label class="vert-center">
-                <input type="checkbox" class="filled-in" id="answerSwitch" onchange="toggleAnswer()">
-                <span>Show Answers</span>
-            </label>
-            <a class="waves-effect waves-light btn right" onclick="nextQuestion()"><i class="material-icons left">keyboard_arrow_right</i>next question</a>
-        </div>
+  <div id="pageContent" class="row container section">
+    <div class="progress">
+      <div class="indeterminate"></div>
     </div>
+  </div>
 
-    <!-- Joker Stuff: (For all page-types) -->
-    <div class="fixed-action-btn">
-        <a class="waves-effect waves-light btn-floating btn-large modal-trigger" href="#joker-modal">
-            <i class="large material-icons">card_giftcard</i>
-        </a>
+  <div id="bottom-panel">
+    <div class="card-panel bottom-panel center">
+      <a class="waves-effect waves-light btn left" onclick="lastQuestion()"
+        ><i class="material-icons left">keyboard_arrow_left</i>last question</a
+      >
+      <span class="new badge grey" data-badge-caption="" id="category"></span>
+      <span id="pageNumber"></span>
+      <label class="vert-center">
+        <input
+          type="checkbox"
+          class="filled-in"
+          id="answerSwitch"
+          onchange="toggleAnswer()"
+        />
+        <span>Show Answers</span>
+      </label>
+      <a class="waves-effect waves-light btn right" onclick="nextQuestion()"
+        ><i class="material-icons left">keyboard_arrow_right</i>next question</a
+      >
     </div>
+  </div>
 
-    <div id="joker-modal" class="modal">
-        <div class="modal-content">
-            <h4>Select a Joker-Type:</h4>
-            <div class="collection">
-                <a onclick="selectJoker('timeout')" class="collection-item modal-close"><i class="material-icons left">av_timer</i>Timeout</a>
-                <a onclick="selectJoker('2x')" class="collection-item modal-close"><i class="material-icons left">filter_2</i>2x Punkte</a>
-                <a onclick="selectJoker('poll')" class="collection-item modal-close"><i class="material-icons left">poll</i>Stream Abstimmung</a>
-                <a onclick="selectJoker('3x')" class="collection-item modal-close"><i class="material-icons left">filter_3</i>3x Punkte</a>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-        </div>
+  <!-- Joker Stuff: (For all page-types) -->
+  <div class="fixed-action-btn">
+    <a
+      class="waves-effect waves-light btn-floating btn-large modal-trigger"
+      href="#joker-modal"
+    >
+      <i class="large material-icons">card_giftcard</i>
+    </a>
+  </div>
+
+  <div id="joker-modal" class="modal">
+    <div class="modal-content">
+      <h4>Select a Joker-Type:</h4>
+      <div class="collection">
+        <a onclick="selectJoker('timeout')" class="collection-item modal-close"
+          ><i class="material-icons left">av_timer</i>Timeout</a
+        >
+        <a onclick="selectJoker('2x')" class="collection-item modal-close"
+          ><i class="material-icons left">filter_2</i>2x Punkte</a
+        >
+        <a onclick="selectJoker('poll')" class="collection-item modal-close"
+          ><i class="material-icons left">poll</i>Stream Abstimmung</a
+        >
+        <a onclick="selectJoker('3x')" class="collection-item modal-close"
+          ><i class="material-icons left">filter_3</i>3x Punkte</a
+        >
+      </div>
     </div>
-
-    <div id="joker-user-modal" class="modal">
-        <div class="modal-content">
-            <h4>Select a User:</h4>
-            <p>Selected Joker-Type: <span id="joker-selection"></span></p>
-            <div class="collection">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
-        </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+        >Close</a
+      >
     </div>
+  </div>
 
+  <div id="joker-user-modal" class="modal">
+    <div class="modal-content">
+      <h4>Select a User:</h4>
+      <p>Selected Joker-Type: <span id="joker-selection"></span></p>
+      <div class="collection"></div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+        >Close</a
+      >
+    </div>
+  </div>
 </body>
 
 <template id="joker-user-template">
-    <a onclick="selectJokerUser('TOKEN')" class="collection-item modal-close">NAME</a>
+  <a onclick="selectJokerUser('TOKEN')" class="collection-item modal-close"
+    >NAME</a
+  >
 </template>
 
 <style>
-/* Bottom Bar Custom CSS Code: */
-.bottom-panel {
+  /* Bottom Bar Custom CSS Code: */
+  .bottom-panel {
     position: fixed;
     display: flex;
     justify-content: space-between;
@@ -95,122 +132,168 @@
     width: 50vw;
     margin-left: -25vw;
     padding: 12px;
-}
-#category {
+  }
+  #category {
     font-weight: bold;
-}
+  }
 </style>
 
 <template id="waiting-template">
-    <div class="row">
-        <div class="card-panel">
-            <h5 class="header">Waiting for Start...</h5>
-            <a onclick="changeStatus('question')" class="waves-effect waves-light btn"><i class="material-icons right">label_important</i>Start Game</a>
-        </div>
+  <div class="row">
+    <div class="card-panel">
+      <h5 class="header">Waiting for Start...</h5>
+      <a onclick="changeStatus('question')" class="waves-effect waves-light btn"
+        ><i class="material-icons right">label_important</i>Start Game</a
+      >
     </div>
+  </div>
 </template>
 
 <template id="ingame-template">
-    <div class="col s6 card-panel">
-        <div id="image-type" class="section" hidden>
-            <div class="section">
-                <img class="materialboxed" id="image" alt="Loading..." width="100%" src="">
-            </div>
-            <div class="divider"></div>
-        </div>
-
-        <div id="yt-type" class="section" hidden>
-            <div class="video-container">
-                <iframe id="video" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="divider"></div>
-        </div>
-
-        <div class="section">
-            <h5 class="header">Question</h5>
-            <div class="row">
-                <h6 id="question" class="col s10"></h6>
-            </div>
-        </div>
-
-        <div id="guess-type" class="section" hidden>
-            <div class="divider"></div>
-            <h5 class="header">Guess</h5>
-            <h6 class="header">in Range <span id="guessRange"></span></h6>
-        </div>
-
-        <div id="answer-stage" class="section" hidden>
-            <div class="divider"></div>
-            <h5 class="header">True Answer</h5>
-            <h6 id="trueAnswer"></h6>
-        </div>
-
-        <div id="choice-type" class="section" hidden>
-            <div class="divider"></div>
-            <h5 class="header">Possible Answers</h5>
-            <div class="collection">
-                <a onclick="choiceSelect(1)" class="collection-item" id="answer1"></a>
-                <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
-                <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
-                <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
-            </div>
-        </div>
+  <div class="col s6 card-panel">
+    <div id="image-type" class="section" hidden>
+      <div class="section">
+        <img
+          class="materialboxed"
+          id="image"
+          alt="Loading..."
+          width="100%"
+          src=""
+        />
+      </div>
+      <div class="divider"></div>
     </div>
-    <div class="col s3">
-        <ul class="collection with-header">
-            <li class="collection-header"><h4>Answers</h4></li>
-            <div id="answers"></div>
-        </ul>
+
+    <div id="yt-type" class="section" hidden>
+      <div class="video-container">
+        <iframe
+          id="video"
+          src=""
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="divider"></div>
     </div>
-    <div class="col s3">
-        <ul class="collection with-header">
-            <li class="collection-header"><h4>Scoreboard</h4></li>
-            <div id="scoreboard"></div>
-        </ul>
+
+    <div class="section">
+      <h5 class="header">Question</h5>
+      <div class="row">
+        <h6 id="question" class="col s10"></h6>
+      </div>
     </div>
+
+    <div id="guess-type" class="section" hidden>
+      <div class="divider"></div>
+      <h5 class="header">Guess</h5>
+      <h6 class="header">in Range <span id="guessRange"></span></h6>
+    </div>
+
+    <div id="answer-stage" class="section" hidden>
+      <div class="divider"></div>
+      <h5 class="header">True Answer</h5>
+      <h6 id="trueAnswer"></h6>
+    </div>
+
+    <div id="choice-type" class="section" hidden>
+      <div class="divider"></div>
+      <h5 class="header">Possible Answers</h5>
+      <div class="collection">
+        <a onclick="choiceSelect(1)" class="collection-item" id="answer1"></a>
+        <a onclick="choiceSelect(2)" class="collection-item" id="answer2"></a>
+        <a onclick="choiceSelect(3)" class="collection-item" id="answer3"></a>
+        <a onclick="choiceSelect(4)" class="collection-item" id="answer4"></a>
+      </div>
+    </div>
+  </div>
+  <div class="col s3">
+    <ul class="collection with-header">
+      <li class="collection-header"><h4>Answers</h4></li>
+      <div id="answers"></div>
+    </ul>
+  </div>
+  <div class="col s3">
+    <ul class="collection with-header">
+      <li class="collection-header"><h4>Scoreboard</h4></li>
+      <div id="scoreboard"></div>
+    </ul>
+  </div>
 </template>
 
-<template id="scoreboardUser"><li class="collection-item">USER<a add_func="" class="secondary-content"><i class="material-icons">add_circle</i></a><a low_func="" class="secondary-content"><i class="material-icons">remove_circle_outline</i></a></li></template>
+<template id="scoreboardUser"
+  ><li class="collection-item">
+    USER<a add_func="" class="secondary-content"
+      ><i class="material-icons">add_circle</i></a
+    ><a low_func="" class="secondary-content"
+      ><i class="material-icons">remove_circle_outline</i></a
+    >
+  </li></template
+>
 
-<template id="answerUser"><li class="collection-item valign-wrapper">USER:<span style="margin-left: 8px; margin-right: 5px; font-weight: bold;">ANSWER</span>JOKER</li></template>
+<template id="answerUser"
+  ><li class="collection-item valign-wrapper">
+    USER:<span style="margin-left: 8px; margin-right: 5px; font-weight: bold;"
+      >ANSWER</span
+    >JOKER
+  </li></template
+>
 
 <template id="score-template">
-    <div class="container">
-        <div class="card-panel">
-            <div class="section">
-                <h5>Current Scores</h5>
-                <ul class="collection"></ul>
-            </div>
-            <div class="section">
-                <a onclick="changeStatus('question')" class="waves-effect waves-light btn white grey-text text-darken-4">back</a>
-                <a onclick="changeStatus('next')" class="waves-effect waves-light btn right"><i class="material-icons right">keyboard_arrow_right</i>next question</a>
-            </div>
-        </div>
+  <div class="container">
+    <div class="card-panel">
+      <div class="section">
+        <h5>Current Scores</h5>
+        <ul class="collection"></ul>
+      </div>
+      <div class="section">
+        <a
+          onclick="changeStatus('question')"
+          class="waves-effect waves-light btn white grey-text text-darken-4"
+          >back</a
+        >
+        <a
+          onclick="changeStatus('next')"
+          class="waves-effect waves-light btn right"
+          ><i class="material-icons right">keyboard_arrow_right</i>next
+          question</a
+        >
+      </div>
     </div>
+  </div>
 </template>
 
 <template id="finished-template">
-    <div class="container">
-        <div class="card-panel">
-            <div class="section">
-                <h5>Final Results</h5>
-                <ul class="collection"></ul>
-            </div>
-        </div>
+  <div class="container">
+    <div class="card-panel">
+      <div class="section">
+        <h5>Final Results</h5>
+        <ul class="collection"></ul>
+      </div>
     </div>
+  </div>
 </template>
 
 <template id="scoreUser-template">
-    <li class="collection-item">USER</li>
+  <li class="collection-item">USER</li>
 </template>
 
 <div id="finish-modal" class="modal">
-    <div class="modal-content">
-        <h4>Finish Quiz?</h4>
-        <p>This was the last question. By clicking "continue", you'll finish the quiz.</p>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">cancel</a>
-        <a onclick="socket.emit('nextQuestion')" class="modal-close waves-effect waves-green btn-flat">continue</a>
-    </div>
+  <div class="modal-content">
+    <h4>Finish Quiz?</h4>
+    <p>
+      This was the last question. By clicking "continue", you'll finish the
+      quiz.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+      >cancel</a
+    >
+    <a
+      onclick="socket.emit('nextQuestion')"
+      class="modal-close waves-effect waves-green btn-flat"
+      >continue</a
+    >
+  </div>
 </div>

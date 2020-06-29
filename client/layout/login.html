@@ -1,48 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <head>
-	<!-- Meta -->
-	<title>Quiz</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, user-scalable=no" />
-	<!-- Styling -->
-	<link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="styles/materialize.css">
-	<!-- Scripts -->
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="scripts/login.js"></script>
+  <!-- Meta -->
+  <title>Quiz</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <!-- Styling -->
+  <link
+    rel="shortcut icon"
+    type="image/x-icon"
+    href="assets/icons/favicon.ico"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles/materialize.css" />
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts/login.js"></script>
 </head>
 
 <body>
-	<nav>
-		<div class="nav-wrapper">
-		  <a class="brand-logo center">🎮 Abi-Gaming Quiz</a>
-		  <ul class="right hide-on-med-and-down">
-			<li><a onclick="refreshButton()"><i class="material-icons">refresh</i></a></li>
-		  </ul>
-		</div>
-	</nav>
-	
-	<div class="container section">
-		<div class="section">
-			<h5>Please Login:</h5>
-		</div>
-		
-		<div class="section">
-			<div class="input-field col s5">
-				<select id="user-list">
-					<option value="" disabled selected>Select the user</option>
-				</select>
-				<label>User Name</label>
-			</div>
-			<div class="input-field col s5">
-			  <input id="password" type="password" class="validate">
-			  <label for="password">Password</label>
-			</div>
-			<a class="waves-effect waves-light btn" onclick="loginButton()"><i class="material-icons left">check</i>Login</a>
-		</div>
-  </div>
+  <nav>
+    <div class="nav-wrapper">
+      <a class="brand-logo center">Quiz Battle ⚡</a>
+      <ul class="right hide-on-med-and-down">
+        <li>
+          <a onclick="refreshButton()"><i class="material-icons">refresh</i></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
+  <div class="container section">
+    <div class="section">
+      <h5>Please Login:</h5>
+    </div>
+
+    <div class="section">
+      <div class="input-field col s5">
+        <select id="user-list">
+          <option value="" disabled selected>Select the user</option>
+        </select>
+        <label>User Name</label>
+      </div>
+      <div class="input-field col s5">
+        <input id="password" type="password" class="validate" />
+        <label for="password">Password</label>
+      </div>
+      <a class="waves-effect waves-light btn" onclick="loginButton()"
+        ><i class="material-icons left">check</i>Login</a
+      >
+    </div>
+  </div>
 </body>
