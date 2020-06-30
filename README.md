@@ -1,4 +1,5 @@
 # Node-Quiz-Server
+
 A simple NodeJS quiz server using ExpressJS and Socket.io
 
 ### Structure
@@ -24,8 +25,6 @@ There are 5 different question-types:
 - `image` - Embedded Image w/ question
 - `yt` - Embedded Youtube-Videos w/ question
 
-
-
 **You need to provide 2 files.**
 
 1. `data/quiz.csv` - Providing all the questions and answers. Like this:
@@ -43,21 +42,35 @@ There are 5 different question-types:
 
    ```json
    {
-       "users":[
-           {"name":"GameMaster","password":"SomePassword"},
-           {"name":"User1","password":"User1pw"},
-           {"name":"User2","password":"User2pw"},
-           {"name":"User3","password":"User3pw"}
-       ]
+     "users": [
+       { "name": "GameMaster", "password": "SomePassword" },
+       { "name": "User1", "password": "User1pw" },
+       { "name": "User2", "password": "User2pw" },
+       { "name": "User3", "password": "User3pw" }
+     ]
    }
    ```
 
    The first one will get to be the gamemaster.
 
 There are four **Joker-Types**:
+
 - `timeout` - Will induce a 10 second timeout for everybody
 - `2x` - Will grant double points for current question
 - `poll` - Will start a poll in Livestream
 - `3x` - Will grant triple points for any player.
 
-*All Jokers are currently executed by the GameMaster.*
+_All Jokers are currently executed by the GameMaster._
+
+### Features
+
+- Live-Preview of selected answers
+- GameMaster that controls the quiz (Like a moderator)
+- Jokers (Currently WIP)
+- Score Keeping
+
+### History
+
+This type of quiz is originally from the german youtube channel "Pietsmiet" which is doing a quiz format. There, the participants record their webcams as well as a Google Document where they type in the answers.
+
+This quiz is made to be moderated and maybe screen-recorded. The different question types were my idea to create a bit more variety.
