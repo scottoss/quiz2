@@ -13,7 +13,7 @@ A simple NodeJS quiz server using ExpressJS and Socket.io
 
 - download
 - run `npm install`
-- run main.js
+- run `npm start`
 
 ### How to use
 
@@ -55,22 +55,28 @@ There are 5 different question-types:
 
 There are four **Joker-Types**:
 
-- `timeout` - Will induce a 10 second timeout for everybody
-- `2x` - Will grant double points for current question
-- `poll` - Will start a poll in Livestream
-- `3x` - Will grant triple points for any player.
+- `3x` - Will grant double points for current question
+- `spy` - Will allow the user to see all other answers for this round!
+- `hint` - Will randomly show a small selection of the answer (E.g. '1\_\_')
 
-_All Jokers are currently executed by the GameMaster._
+_All Jokers are temporarily removed from the game, as the architecture will be rebuilt._
 
 ### Features
 
 - Live-Preview of selected answers
 - GameMaster that controls the quiz (Like a moderator)
-- Jokers (Currently WIP)
 - Score Keeping
+- Different Question types
+- Imports a .csv file for questions & answers.
+- Pre-select the usernames to avoid confusion during the game. (data/users.json)
 
 ### History
 
 This type of quiz is originally from the german youtube channel "Pietsmiet" which is doing a quiz format. There, the participants record their webcams as well as a Google Document where they type in the answers.
 
 This quiz is made to be moderated and maybe screen-recorded. The different question types were my idea to create a bit more variety.
+
+### The Future
+
+I'll be re-building this quiz server in Vue / Nuxt.js which will allow me to maintain everything more easily.
+That will introduce new Joker types, as well as a nicer UI.
