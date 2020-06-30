@@ -63,61 +63,7 @@
       >
     </div>
   </div>
-
-  <!-- Joker Stuff: (For all page-types) -->
-  <div class="fixed-action-btn">
-    <a
-      class="waves-effect waves-light btn-floating btn-large modal-trigger"
-      href="#joker-modal"
-    >
-      <i class="large material-icons">card_giftcard</i>
-    </a>
-  </div>
-
-  <div id="joker-modal" class="modal">
-    <div class="modal-content">
-      <h4>Select a Joker-Type:</h4>
-      <div class="collection">
-        <a onclick="selectJoker('timeout')" class="collection-item modal-close"
-          ><i class="material-icons left">av_timer</i>Timeout</a
-        >
-        <a onclick="selectJoker('2x')" class="collection-item modal-close"
-          ><i class="material-icons left">filter_2</i>2x Punkte</a
-        >
-        <a onclick="selectJoker('poll')" class="collection-item modal-close"
-          ><i class="material-icons left">poll</i>Stream Abstimmung</a
-        >
-        <a onclick="selectJoker('3x')" class="collection-item modal-close"
-          ><i class="material-icons left">filter_3</i>3x Punkte</a
-        >
-      </div>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat"
-        >Close</a
-      >
-    </div>
-  </div>
-
-  <div id="joker-user-modal" class="modal">
-    <div class="modal-content">
-      <h4>Select a User:</h4>
-      <p>Selected Joker-Type: <span id="joker-selection"></span></p>
-      <div class="collection"></div>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat"
-        >Close</a
-      >
-    </div>
-  </div>
 </body>
-
-<template id="joker-user-template">
-  <a onclick="selectJokerUser('TOKEN')" class="collection-item modal-close"
-    >NAME</a
-  >
-</template>
 
 <style>
   /* Bottom Bar Custom CSS Code: */
@@ -235,7 +181,7 @@
   ><li class="collection-item valign-wrapper">
     USER:<span style="margin-left: 8px; margin-right: 5px; font-weight: bold;"
       >ANSWER</span
-    >JOKER
+    >
   </li></template
 >
 

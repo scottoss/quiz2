@@ -1,40 +1,29 @@
-const masterHandler = require('./masterHandler');
-const userData = require('../users/userData');
-const quizData = require('../quiz/quizData');
+const masterHandler = require("./masterHandler");
+const userData = require("../users/userData");
+const quizData = require("../quiz/quizData");
 
-exports.pageUpdates = function (socket) {
+exports.pageUpdates = function(socket) {
+  socket.on("requestUpdate", function(token) {
+    if (userData.checkMaster(token) == true) {
+      socket.emit("masterQuiz", quizData.getQuiz());
+      socket.emit("masterUsers", userData.getMasterInfo());
+    }
+    updateUserPage(socket, token);
+  });
+};
 
-	socket.on('requestUpdate', function (token) {
-		if (userData.checkMaster(token) == true) {
-			socket.emit('masterQuiz', quizData.getQuiz());
-			socket.emit('masterUsers', userData.getMasterInfo());
-		}
-		updateUserPage(socket, token);
-    });
+exports.input = function(socket) {
+  socket.on("userInput", function(d) {
+    userData.updateInput(d);
+    masterHandler.updateUserInfo();
+  });
 
-}
+  socket.on("userReady", function(d) {
+    userData.updateReady(d);
+    masterHandler.updateUserInfo();
+  });
+};
 
-exports.input = function (socket) {
-
-	socket.on('userInput', function (d) {
-		userData.updateInput(d);
-		masterHandler.updateUserInfo();
-	});
-
-	socket.on('userReady', function (d) {
-		userData.updateReady(d);
-		masterHandler.updateUserInfo();
-	});
-	
-	socket.on('useJoker', function (d) {
-		if (userData.useJoker(d.token, d.jokerType) == true) {
-			masterHandler.updateAll();
-			masterHandler.broadcastMsg(userData.getUserByToken(d.token).name + " used a " + d.jokerType + " joker!");
-		}
-	}); 
-
-}
-
-function updateUserPage (socket, token) {
-	socket.emit('pageUpdate', quizData.getPageInfo(token));
+function updateUserPage(socket, token) {
+  socket.emit("pageUpdate", quizData.getPageInfo(token));
 }
