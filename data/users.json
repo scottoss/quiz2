@@ -3,6 +3,10 @@
         {"name":"GameMaster","password":"scott.13"},
         {"name":"User1","password":"user1"},
         {"name":"User2","password":"user2"},
-        {"name":"User3","password":"user3"}
+        {"name":"User3","password":"user3"},
+        {"name":"User4","password":"user4"},
+        {"name":"User5","password":"user5"},
+        {"name":"User6","password":"user6"},
+        {"name":"User7","password":"user7"}
     ]
 }
