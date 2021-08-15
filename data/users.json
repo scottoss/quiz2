@@ -1,8 +1,8 @@
 {
     "users":[
-        {"name":"GameMaster","password":"GameMaster"},
-        {"name":"User1","password":"User1"},
-        {"name":"User2","password":"User2"},
-        {"name":"User3","password":"User3"}
+        {"name":"GameMaster","password":"scott.13"},
+        {"name":"User1","password":"user1"},
+        {"name":"User2","password":"user2"},
+        {"name":"User3","password":"user3"}
     ]
 }
