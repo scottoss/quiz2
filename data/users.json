@@ -1,14 +1,17 @@
 {
     "users":[
-        {"name":"GameMaster","password":"scott.13"},
-        {"name":"menno","password":"menno"},
-        {"name":"mike","password":"mike"},
-        {"name":"julia","password":"julia"},
-        {"name":"mohammed","password":"mohammed"},
-        {"name":"iris","password":"iris"},
-        {"name":"danique","password":"danique"},
-        {"name":"nadia","password":"nadia"},
+        {"name":"GameMaster","password":"master"},
+        {"name":"charissa","password":"charissa"},
+        {"name":"levi","password":"levi"},
+        {"name":"lysanne","password":"lysanne"},
+        {"name":"niek","password":"niek"},
+        {"name":"leslie","password":"leslie"},
+        {"name":"roberto","password":"roberto"},
+        {"name":"scott","password":"scott"},
         {"name":"dirk","password":"dirk"},
-        {"name":"elco","password":"elco"}
+        {"name":"leiding-1","password":"leiding"},
+        {"name":"leiding-2","password":"leiding"},
+        {"name":"leiding-3","password":"leiding"},
+        {"name":"leiding-4","password":"leiding"}
     ]
 }
